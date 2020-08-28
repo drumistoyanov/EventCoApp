@@ -1,0 +1,64 @@
+﻿@model BookingDetailsViewModel
+
+@{ ViewData["Title"] = "Details Booking"; }
+
+<section class="about-banner relative">
+    <div class="row d-flex align-items-center justify-content-center">
+        <div class="container">
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="about-content col-lg-12">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="container">
+    <div class="panel-heading border">
+        Details Booking
+    </div>
+    <div class="panel-body">
+        <div class="row no-margin">
+            <div class="col-lg-12">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="Event.Name"></label>
+                        <input class="form-control" asp-for="Event.Name" disabled>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="Event.Location"></label>
+                        <input class="form-control" asp-for="Event.Location" disabled>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="Event.When"></label>
+                        <input class="form-control" asp-for="Event.When" disabled>
+                    </div>
+                    <div class="form-group col-md-6">
+                      
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="TicketPrice"></label>
+                        <input class="form-control" asp-for="TicketPrice" disabled>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="TicketCount"></label>
+                        <input class="form-control" asp-for="TicketCount" disabled>
+                        @Html.ValidationMessageFor(m => m.TicketCount, null, new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label asp-for="WholePrice"></label>
+                        <input class="form-control" asp-for="WholePrice" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,83 @@
+﻿@model SearchEventsModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@*<div class="text-center">
+        <h1 class="display-4">Welcome</h1>
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    </div>*@
+<!-- start banner Area -->
+@*<section class="about-banner relative">
+        <div class="overlay overlay-bg"></div>
+        <div class="container">
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="about-content col-lg-12">
+                    <h1 class="text-white">
+                        Hotels
+                    </h1>
+                    <p class="text-white link-nav"><a href="index.html">Home </a>  <span class="lnr lnr-arrow-right"></span>  <a href="hotels.html"> Hotels</a></p>
+                </div>
+            </div>
+        </div>
+    </section>*@
+<!-- End banner Area -->
+
+<section class="banner-area relative">
+    <div class="overlay overlay-bg"></div>
+    <div class="container">
+        <div class="row fullscreen align-items-center justify-content-between">
+            <div class="col-lg-6 col-md-6 banner-left">
+                <h6 class="text-white">Away from monotonous life</h6>
+                <h1 class="text-white">Magical Travel</h1>
+                <p class="text-white">
+                    If you are looking at blank cassettes on the web, you may be very confused at the difference in price. You may see some for as low as $.17 each.
+                </p>
+                <a href="#" class="primary-btn text-uppercase">Get Started</a>
+            </div>
+            <div class="col-lg-4 col-md-6 banner-right">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="event1-tab" data-toggle="tab" href="#flight" role="tab" aria-controls="flight" aria-selected="true">Events</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="event1" role="tabpanel" aria-labelledby="flight-tab">
+                        <form asp-action="Index" asp-controller="Events" class="form-wrap" method="post" role="form">
+                            @* <input type="text" class="form-control" name="name" placeholder="From " onfocus="this.placeholder = ''" onblur="this.placeholder = 'From '">*@
+                            @* <input type="text" class="form-control" name="to" placeholder="To " onfocus="this.placeholder = ''" onblur="this.placeholder = 'To '">*@
+                            @*<input type="text" class="form-control" name="start" placeholder="Location " onfocus="this.placeholder = ''" onblur="this.placeholder = 'Location '">*@
+                            @Html.EditorFor(m => m.From, additionalViewData: new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(m => m.To, additionalViewData: new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.DropDownListFor(m => m.LocationId, Model.Locations, new { @class = "form-control" })
+                            @Html.DropDownListFor(m => m.EventTypeId, Model.EventTypes, new { @class = "form-control" })
+                            <input type="submit" class="primary-btn text-uppercase" value="Search" />
+                            @*<a href="#" class="primary-btn text-uppercase">Search</a>*@
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@*<section class="destinations-area">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="menu-content pb-40 col-lg-8">
+                    <div class="title text-center">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                </div>
+                <div class="col">
+
+                </div>
+                <div class="col">
+                </div>
+
+            </div>
+        </div>
+    </section>*@

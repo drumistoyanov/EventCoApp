@@ -1,0 +1,52 @@
+﻿@model IEnumerable<EventCoApp.DataAccessLibrary.Models.Role>
+
+@{ ViewData["Title"] = "Roles"; }
+<section class="about-banner relative">
+    <div class="row d-flex align-items-center justify-content-center">
+        <div class="container">
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="about-content col-lg-12">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="container">
+    <div class="panel mb25">
+        
+           <h1 class="text-center"> All Role</h1>
+        
+        <div class="panel-heading">
+            <span class="pull-right">
+                <a asp-action="Create">Create New</a>
+            </span>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped mb0">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Name)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" data-toggle=tooltip data-placement=top title="Edit"><i class="fa fa-edit"></i></a>
+                    &nbsp;
+                    <a asp-action="Details" asp-route-id="@item.Id" data-toggle=tooltip data-placement=top title="Details"><i class="fa fa-eye"></i></a>
+                    &nbsp;
+                    @*<a asp-action="Delete" asp-route-id="@item.Id" data-toggle=tooltip data-placement=top title="Delete"><i class="fa fa-trash"></i></a>*@
+                </td>
+            </tr>
+}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

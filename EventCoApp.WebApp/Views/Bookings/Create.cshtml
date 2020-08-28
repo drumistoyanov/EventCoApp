@@ -1,0 +1,61 @@
+@model BookingViewModel
+
+@{ ViewData["Title"] = "Create Booking"; }
+
+<section class="about-banner relative">
+    <div class="row d-flex align-items-center justify-content-center">
+        <div class="container">
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="about-content col-lg-12">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="container">
+    <h1 class="text-center">Book Ticket</h1>
+    <form asp-action="Create" class="form-check" method="post" role="form">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="Event.Name"></label>
+                <input class="form-control" asp-for="Event.Name" disabled>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Event.Location"></label>
+                <input class="form-control" asp-for="Event.Location" disabled>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="Event.When"></label>
+                <input class="form-control" asp-for="Event.When" disabled>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="TicketCountLeft"></label>
+                <input class="form-control" asp-for="TicketCountLeft" disabled>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="TicketPrice"></label>
+                <input class="form-control" asp-for="TicketPrice" disabled>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="TicketCount"></label>
+                <input class="form-control" asp-for="TicketCount">
+                @Html.ValidationMessageFor(m => m.TicketCount, null, new { @class = "text-danger" })
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="WholePrice"></label>
+                <input class="form-control" asp-for="WholePrice" disabled>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Book now!</button>
+    </form>
+</div>
+
+
+
+<script src="~/js/booking.js"></script>

@@ -1,0 +1,101 @@
+﻿@model IEnumerable<EventListItemViewModel>
+
+@{ ViewData["Title"] = "Events";
+
+    int PageNumber = (int)ViewData["PageNumber"];
+    int PageSize = (int)ViewData["PageSize"];
+    int TotalItemCount = (int)ViewData["TotalItemCount"]; }
+<section class="about-banner relative">
+    <div class="row d-flex align-items-center justify-content-center">
+        <div class="container">
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="about-content col-lg-12">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Start destinations Area -->
+<section class="destinations-area section-gap">
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="menu-content pb-40 col-lg-8">
+                <div class="title text-center">
+                    <h1 class="mb-10">Popular Destinations</h1>
+                    <p>We all live in an age that belongs to the young at heart. Life that is becoming extremely fast, day to.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var item in Model)
+            {
+<div class="col-lg-4">
+    <div class="single-destinations">
+        <div class="thumb">
+            @if (@item.Images != null && @item.Images.Count != 0)
+            {
+<img src='~/images/@item.Images.FirstOrDefault().ImageData' height="300" alt="">}
+        </div>
+        <div class="details">
+            <h4 class="d-flex justify-content-between">
+                <span>@item.Name</span>
+                @*<div class="star">
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star"></span>
+                    </div>*@
+            </h4>
+            @*<p>
+                    View on map   |   49 Reviews
+                </p>*@
+            <ul class="package-list">
+                <li class="d-flex justify-content-between align-items-center">
+                    <span>When</span>
+                    <span>@item.When</span>
+                </li>
+                <li class="d-flex justify-content-between align-items-center">
+                    <span>Type</span>
+                    <span>@item.EventType.Name</span>
+                </li>
+
+                <li class="d-flex justify-content-between align-items-center">
+                    <span>Creator</span>
+                    <span>@item.UserName</span>
+                </li>
+                <li class="d-flex justify-content-between align-items-center">
+                    <span>Seen</span>
+                    <span>@item.Counter</span>
+                </li>
+
+                <li class="d-flex justify-content-between align-items-center">
+                    <span>Ticket price</span>
+                    @if (@item.TicketPrice == 0)
+                    {
+    <a asp-action="Create" asp-controller="Bookings" asp-route-id="@item.Id" class="price-btn">Free</a> }
+else
+{
+<a  asp-action="Create" asp-controller="Bookings" asp-route-id="@item.Id" class="price-btn">@item.TicketPrice</a>}
+                </li>
+                <li class="d-flex justify-content-between align-items-center">
+                    <span>Tickets left</span>
+                    <span>@item.TicketCount</span>
+                </li>
+                <li class="d-flex justify-content-between align-items-center">
+                    <span>Details</span>
+                    <a asp-action="Details" asp-route-id="@item.Id" data-toggle=tooltip data-placement=top title="Details"><i class="fa fa-eye"></i></a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>      }
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script type="text/javascript">$("[data-toggle=tooltip]").tooltip();</script>
+}
+

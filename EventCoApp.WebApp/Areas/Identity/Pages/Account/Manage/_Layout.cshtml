@@ -1,0 +1,63 @@
+﻿@{
+    if (ViewData.TryGetValue("ParentLayout", out var parentLayout))
+    {
+        Layout = (string)parentLayout;
+    }
+    else
+    {
+        Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+    }
+}
+
+@*<h2>Manage your account</h2>
+
+    <div>
+        <h4>Change your account settings</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-3">*@
+
+@*</div>
+    <div class="col-md-9">*@
+<section class="about-banner relative">
+    <div class="row d-flex align-items-center justify-content-center">
+        <div class="container">
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="about-content col-lg-12">
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+    <section class="destinations-area">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="menu-content pb-40 col-lg-8">
+                    <div class="title text-center">
+                        <h1 class="mb-10">Account settings</h1>
+                        @*   <p>We all live in an age that belongs to the young at heart. Life that is becoming extremely fast, day to.</p>*@
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <partial name="_ManageNav" />
+                </div>
+                <div class="col">
+
+                </div>
+                <div class="col">
+                    @RenderBody()
+                </div>
+
+            </div>
+        </div>
+    </section>
+    @*</div>
+            </div>
+        </div>*@
+
+    @section Scripts {
+        @RenderSection("Scripts", required: false)
+    }
