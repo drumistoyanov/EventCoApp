@@ -198,6 +198,8 @@ namespace EventCoApp.WebApp.Controllers
                 .Include(e => e.Images)
                 .Include(e => e.EventType)
                 .Include(e => e.Location)
+                .Include(e => e.Messages)
+                .ThenInclude(e => e.CreatedBy)
                 .SingleAsync(e => e.ID == id);
             bool isAuthenticated = User.Identity.IsAuthenticated;
             if (isAuthenticated)

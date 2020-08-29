@@ -25,6 +25,7 @@ namespace EventCoApp.DataAccessLibrary.DataAccess
         public virtual DbSet<Log> Logs { get; set; }
         public virtual DbSet<News> News { get; set; }
         public virtual DbSet<Ticket> Tickets { get; set; }
+        public virtual DbSet<Message> Messages { get; set; }
         public override int SaveChanges() => this.SaveChanges(true);
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -80,7 +81,13 @@ namespace EventCoApp.DataAccessLibrary.DataAccess
                 entity.Property(e => e.UserName).HasMaxLength(256);
 
                 entity.HasMany(d => d.UserPermissions).WithOne(p => p.User).HasForeignKey(d => d.UserId);
+
                 entity.HasMany(e => e.CreatedEvents).WithOne(e => e.CreatedBy).HasForeignKey(e => e.CreatedById);
+
+                entity.HasMany(e => e.Bookings).WithOne(e => e.CreatedBy).HasForeignKey(e => e.CreatedById);
+
+                entity.HasMany(e => e.Messages).WithOne(e => e.CreatedBy).HasForeignKey(e => e.CreatedById);
+
                 entity.ToTable("Users");
             });
             builder.Entity<IdentityUserClaim<int>>(entity =>
@@ -109,7 +116,16 @@ namespace EventCoApp.DataAccessLibrary.DataAccess
                 entity.HasOne<Location>(d => d.Location).WithMany(p => p.Events).HasForeignKey(d => d.LocationId);
                 entity.HasMany<Image>(d => d.Images).WithOne(p => p.Event).HasForeignKey(p => p.EventId);
                 entity.HasMany<Ticket>(d => d.Tickets).WithOne(p => p.Event).HasForeignKey(p => p.EventId);
+                entity.HasMany<Message>(e => e.Messages).WithOne(p => p.Event).HasForeignKey(p => p.EventId);
                 entity.ToTable("Events");
+            });
+
+            builder.Entity<Message>(entity =>
+            {
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+                entity.HasOne<Event>(d => d.Event).WithMany(p => p.Messages).HasForeignKey(d => d.EventId);
+                entity.HasOne<User>(d => d.CreatedBy).WithMany(p => p.Messages).HasForeignKey(d => d.CreatedById);
+                entity.ToTable("Messages");
             });
             builder.Entity<Location>(entity =>
             {

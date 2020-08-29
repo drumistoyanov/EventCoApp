@@ -9,7 +9,7 @@ namespace EventCoApp.DataAccessLibrary.Models
     {
         public News()
         {
-            Images = new List<Image>();
+            Images = new HashSet<Image>();
         }
         [Required]
         [Column(TypeName = "nvarchar(1000)")]

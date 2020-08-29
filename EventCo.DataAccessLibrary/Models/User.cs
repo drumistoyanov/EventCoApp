@@ -17,6 +17,8 @@ namespace EventCoApp.DataAccessLibrary.Models
             Claims = new HashSet<IdentityUserClaim<string>>();
             Logins = new HashSet<IdentityUserLogin<int>>();
             CreatedEvents = new HashSet<Event>();
+            Messages = new HashSet<Message>();
+            Bookings = new HashSet<Booking>();
         }
         [Required]
         [StringLength(50, MinimumLength = 2)]
@@ -38,5 +40,6 @@ namespace EventCoApp.DataAccessLibrary.Models
         public virtual ICollection<UserPermission> UserPermissions { get; set; }
         public virtual ICollection<Booking> Bookings { get; set; }
         public virtual ICollection<Event> CreatedEvents { get; set; }
+        public virtual ICollection<Message> Messages { get; set; }
     }
 }

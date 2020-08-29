@@ -75,6 +75,7 @@ namespace EventCoApp.WebApp.Models
 
         [Display(Name = "Type")]
         public EventTypeListItemViewModel EventType { get; set; }
+        public List<MessageListViewModel> Messages { get; set; }
     }
 
     public class EventListItemViewModel

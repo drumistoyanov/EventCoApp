@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using EventCoApp.Common.BindingModels.Admin.Users;
 using EventCoApp.Common.ViewModels.Admin.Users;
 using EventCoApp.DataAccessLibrary.DataAccess;
 using EventCoApp.DataAccessLibrary.Models;

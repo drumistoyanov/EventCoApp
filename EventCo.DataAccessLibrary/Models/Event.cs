@@ -11,8 +11,10 @@ namespace EventCoApp.DataAccessLibrary.Models
     {
         public Event()
         {
-            Images = new List<Image>();
-            Tickets = new List<Ticket>();
+            Images = new HashSet<Image>();
+            Tickets = new HashSet<Ticket>();
+            Messages = new HashSet<Message>();
+            Bookings = new HashSet<Booking>();
         }
         [Required]
         [Column(TypeName = "nvarchar(50)")]
@@ -34,5 +36,6 @@ namespace EventCoApp.DataAccessLibrary.Models
         public virtual ICollection<Image> Images { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }
         public virtual ICollection<Booking> Bookings { get; set; }
+        public virtual ICollection<Message> Messages { get; set; }
     }
 }

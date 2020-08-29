@@ -4,14 +4,16 @@ using EventCoApp.DataAccessLibrary.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EventCoApp.DataAccessLibrary.Migrations
 {
     [DbContext(typeof(EventCoContext))]
-    partial class EventCoContextModelSnapshot : ModelSnapshot
+    [Migration("20200828124951_messages creator")]
+    partial class messagescreator
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -280,8 +282,6 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("CreatedById");
 
                     b.HasIndex("EventId");
 
@@ -749,14 +749,16 @@ namespace EventCoApp.DataAccessLibrary.Migrations
 
             modelBuilder.Entity("EventCoApp.DataAccessLibrary.Models.Message", b =>
                 {
-                    b.HasOne("EventCoApp.DataAccessLibrary.Models.User", "CreatedBy")
-                        .WithMany("Messages")
-                        .HasForeignKey("CreatedById");
-
                     b.HasOne("EventCoApp.DataAccessLibrary.Models.Event", "Event")
                         .WithMany("Messages")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EventCoApp.DataAccessLibrary.Models.User", "CreatedBy")
+                        .WithMany("Messages")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EventCoApp.DataAccessLibrary.Models.User", "ModifiedBy")

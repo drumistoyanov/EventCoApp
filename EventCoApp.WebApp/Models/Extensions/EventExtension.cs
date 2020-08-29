@@ -42,6 +42,14 @@ namespace EventCoApp.WebApp.Models.Extensions
             destination.UserName = source.CreatedBy.UserName;
             destination.Counter = source.Counter;
 
+            if (source.Messages != null)
+            {
+                destination.Messages = new List<MessageListViewModel>();
+                foreach (var item in source.Messages)
+                {
+                    destination.Messages.Add(item.ToListItemViewModel());
+                }
+            }
 
             if (source.EventType != null)
             {

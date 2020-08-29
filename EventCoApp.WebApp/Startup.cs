@@ -7,8 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using EventCoApp.DataAccessLibrary.DataAccess;
 using EventCoApp.DataAccessLibrary.Models;
-using EventCoApp.Services.Admin.Interfaces;
-using EventCoApp.Services.Admin;
 using AutoMapper;
 using System.Threading.Tasks;
 using System;
@@ -21,6 +19,7 @@ using System.IO;
 using EventCoApp.Services.Middlewares;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using EventCoApp.Common.Helpers;
+using EventCoApp.WebApp.Hubs;
 
 namespace EventCoApp.WebApp
 {
@@ -63,7 +62,6 @@ namespace EventCoApp.WebApp
                .AddRoleStore<RoleStore<Role, EventCoContext, int>>()
                .AddRoleManager<RoleManager<Role>>()
                .AddDefaultTokenProviders();
-            RegisterServiceLayer(services);
             services.AddCloudscribePagination();
 
             services.AddSession(opt =>
@@ -104,13 +102,16 @@ namespace EventCoApp.WebApp
 
             // Register the TagHelperComponent
             services.AddTransient<ITagHelperComponent, GoogleAnalyticsTagHelperComponent>();
+
+            //signalR
+            services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
-            UserManager<User> userManager,
-            RoleManager<Role> roleManager,
-            IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -148,13 +149,8 @@ namespace EventCoApp.WebApp
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapHub<ChatHub>("/chathub");
             });
-
-            // CreateRoles(serviceProvider).Wait();
-        }
-        private static void RegisterServiceLayer(IServiceCollection services)
-        {
-            services.AddScoped<IAdminUsersService, AdminUsersService>();
         }
     }
 }

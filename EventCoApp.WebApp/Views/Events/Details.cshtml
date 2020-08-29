@@ -1,5 +1,5 @@
 ﻿@model EventDetailsViewModel;
-
+@inject SignInManager<EventCoApp.DataAccessLibrary.Models.User> SignInManager
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -14,6 +14,11 @@
         </div>
     </div>
 </section>
+<head>
+    <link rel="stylesheet" href="~/css/chat.css">
+</head>
+@if (SignInManager.IsSignedIn(User))
+{@Html.Hidden("hiddenName", @User.Identity.Name)}
 <div class="container">
     <h1>Details</h1>
 
@@ -64,8 +69,170 @@
             <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
             <a class="next" onclick="plusSlides(1)">&#10095;</a>
         </div>
-        <a asp-action="Create" asp-controller="Bookings" asp-route-id="@Model.Id" data-toggle=tooltip data-placement=top title="Details"><i class="fa fa-eye"></i></a>
         <br />
+        @if (SignInManager.IsSignedIn(User))
+        {
+            @Html.Hidden("hiddenEventId", @Model.Id)
+
+            <div class="container-fluid h-100">
+                <div class="col-md-8 col-xl-6 chat">
+                    <div class="card">
+                        <div class="card-header msg_head">
+                        </div>
+                        <div id="messages" class="card-body msg_card_body">
+                            @{
+
+                                int idLeft = 0;
+                                int idRight = 0;
+                                int lastSide = 1;
+
+                            }
+
+                            @for (int i = 0; i < Model.Messages.Count - 1; i++)
+                            {
+                                @if (Model.Messages[i].CreatedById != Model.Messages[i + 1].CreatedById && lastSide == 1)
+                                {
+                                    <div class="d-flex justify-content-start mb-4">
+                                        <div class="img_cont_msg">
+                                            @Html.DisplayFor(x => Model.Messages[i].CreatedBy)
+                                        </div>
+                                        <div class="msg_cotainer">
+                                            @Html.DisplayFor(x => Model.Messages[i].Content)
+                                            <span class="msg_time">@Model.Messages[i].When</span>
+
+                                        </div>
+                                    </div>
+                                    lastSide = 0;
+                                }
+                                else
+                                @if (Model.Messages[i].CreatedById == Model.Messages[i + 1].CreatedById && lastSide == 1)
+                                {
+                                    <div class="d-flex justify-content-start mb-4">
+                                        <div class="img_cont_msg">
+                                            @Html.DisplayFor(x => Model.Messages[i].CreatedBy)
+                                        </div>
+                                        <div class="msg_cotainer">
+                                            @Html.DisplayFor(x => Model.Messages[i].Content)
+                                            <span class="msg_time">@Model.Messages[i].When</span>
+
+                                        </div>
+                                    </div>
+                                    lastSide = 1;
+                                }
+                                else
+                                @if (Model.Messages[i].CreatedById == Model.Messages[i + 1].CreatedById && lastSide == 0)
+                                {
+                                    <div class="d-flex justify-content-end mb-4">
+                                        <div class="msg_cotainer_send">
+                                            @Html.DisplayFor(x => Model.Messages[i].Content)
+                                            <span class="msg_time_send">@Model.Messages[i].When</span>
+
+                                        </div><div class="img_cont_msg">
+                                            @Html.DisplayFor(x => Model.Messages[i].CreatedBy)
+                                        </div>
+                                    </div>
+                                    lastSide = 0;
+                                }
+                                else
+                                @if (Model.Messages[i].CreatedById != Model.Messages[i + 1].CreatedById && lastSide == 0)
+                                {
+                                    <div class="d-flex justify-content-end mb-4">
+                                        <div class="msg_cotainer_send">
+                                            @Html.DisplayFor(x => Model.Messages[i].Content)
+                                            <span class="msg_time_send">@Model.Messages[i].When</span>
+
+                                        </div>
+                                        <div class="img_cont_msg">
+                                            @Html.DisplayFor(x => Model.Messages[i].CreatedBy)
+                                        </div>
+                                    </div>
+                                    lastSide = 1;
+                                }
+                            }
+                            @{
+                                @if (Model.Messages[Model.Messages.Count - 1].CreatedById != Model.Messages[Model.Messages.Count - 2].CreatedById && lastSide == 1)
+                                {
+                                    <div class="d-flex justify-content-start mb-4">
+                                        <div class="img_cont_msg">
+                                            @Html.DisplayFor(x => Model.Messages[Model.Messages.Count - 1].CreatedBy)
+                                        </div>
+                                        <div class="msg_cotainer">
+                                            @Html.DisplayFor(x => Model.Messages[Model.Messages.Count - 1].Content)
+                                            <span class="msg_time">@Model.Messages[Model.Messages.Count - 1].When</span>
+
+                                        </div>
+                                    </div>
+                                    lastSide = 0;
+                                    @Html.Hidden("lastSide", lastSide)
+                                    @Html.Hidden("hiddenLastUser", Model.Messages[Model.Messages.Count - 1].CreatedBy)
+                                }
+                                else
+                                @if (Model.Messages[Model.Messages.Count - 1].CreatedById == Model.Messages[Model.Messages.Count - 2].CreatedById && lastSide == 1)
+                                {
+                                    <div class="d-flex justify-content-start mb-4">
+                                        <div class="img_cont_msg">
+                                            @Html.DisplayFor(x => Model.Messages[Model.Messages.Count - 1].CreatedBy)
+                                        </div>
+                                        <div class="msg_cotainer">
+                                            @Html.DisplayFor(x => Model.Messages[Model.Messages.Count - 1].Content)
+                                            <span class="msg_time">@Model.Messages[Model.Messages.Count - 1].When</span>
+
+                                        </div>
+                                    </div>
+                                    lastSide = 1;
+                                    @Html.Hidden("lastSide", lastSide)
+                                    @Html.Hidden("hiddenLastUser", Model.Messages[Model.Messages.Count - 1].CreatedBy)
+                                }
+                                else
+                            @if (Model.Messages[Model.Messages.Count - 1].CreatedById == Model.Messages[Model.Messages.Count - 2].CreatedById && lastSide == 0)
+                                {
+                                    <div class="d-flex justify-content-end mb-4">
+                                        <div class="msg_cotainer_send">
+                                            @Html.DisplayFor(x => Model.Messages[Model.Messages.Count - 1].Content)
+                                            <span class="msg_time_send">@Model.Messages[Model.Messages.Count - 1].When</span>
+
+                                        </div><div class="img_cont_msg">
+                                            @Html.DisplayFor(x => Model.Messages[Model.Messages.Count - 1].CreatedBy)
+                                        </div>
+                                    </div>
+                                    lastSide = 0;
+                                    @Html.Hidden("lastSide", lastSide)
+                                    @Html.Hidden("hiddenLastUser", Model.Messages[Model.Messages.Count - 1].CreatedBy)
+                                }
+                                else
+                            @if (Model.Messages[Model.Messages.Count - 1].CreatedById != Model.Messages[Model.Messages.Count - 2].CreatedById && lastSide == 0)
+                                {
+                                    <div class="d-flex justify-content-end mb-4">
+                                        <div class="msg_cotainer_send">
+                                            @Html.DisplayFor(x => Model.Messages[Model.Messages.Count - 1].Content)
+                                            <span class="msg_time_send">@Model.Messages[Model.Messages.Count - 1].When</span>
+                                        </div><div class="img_cont_msg">
+                                            @Html.DisplayFor(x => Model.Messages[Model.Messages.Count - 1].CreatedBy)
+                                        </div>
+                                    </div>
+                                    lastSide = 1;
+
+                                    @Html.Hidden("lastSide", lastSide)
+                                    @Html.Hidden("hiddenLastUser", Model.Messages[Model.Messages.Count - 1].CreatedBy)
+                                }
+                            }
+
+
+                        </div>
+                        <div class="card-footer">
+                            <div class="input-group">
+                                <textarea name="" id="textMessage" class="form-control type_msg" placeholder="Type your message..."></textarea>
+                                <div class="input-group-append">
+                                    <span id="buttonSend" class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>}
+        <a asp-action="Create" class="btn btn-primary float-right" asp-controller="Bookings" asp-route-id="@Model.Id" data-toggle=tooltip data-placement=top title="Details">Book Now!</a>
+
     </div>
     <div>
         @*<a asp-page="./Edit" asp-route-id="@Model.Id">Edit</a> |
@@ -73,3 +240,5 @@
     </div>
 </div>
 <script src="~/js/event.js"></script>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js"></script>

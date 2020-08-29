@@ -1,10 +1,3 @@
 {
-  "dependencies": {
-    "mssql": {
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroup')]/providers/Microsoft.Sql/servers/eventcoappwebappdbserver/databases/EventCoApp.WebApp_db",
-      "type": "mssql.azure",
-      "connectionId": "DefaultConnection",
-      "secretStore": "AzureAppSettings"
-    }
-  }
+  "dependencies": {}
 }
