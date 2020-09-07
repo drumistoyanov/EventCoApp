@@ -8,14 +8,24 @@ $(document).keypress(function (e) {
     }
 });
 //Disable send button until connection is established
-document.getElementById("buttonSend").disabled = true;
-var objDiv = document.getElementById("messages");
-objDiv.scrollTop = objDiv.scrollHeight;
-var lastUser = document.getElementById('hiddenLastUser').value;
+if (document.getElementById("buttonSend") != null) {
+
+    document.getElementById("buttonSend").disabled = true;
+}
+if (document.getElementById("messages") != null) {
+
+    var objDiv = document.getElementById("messages");
+    objDiv.scrollTop = objDiv.scrollHeight;
+}
+if (document.getElementById('hiddenLastUser')!=null) {
+
+    var lastUser = document.getElementById('hiddenLastUser').value;
+}
 connection.on("ReceiveMessage", function (user, message) {
     var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    var lastSide = document.getElementById('lastSide').value;
-    if (lastUser===user) {
+    var lastSide = parseInt(document.getElementById('lastSide').value);
+    lastUser = document.getElementById('hiddenLastUser').value;
+    if (lastUser === user) {
         if (lastSide === 0) {
 
             let div = document.createElement('div');
@@ -66,7 +76,8 @@ connection.on("ReceiveMessage", function (user, message) {
             objDiv.scrollTop = objDiv.scrollHeight;
             document.getElementById('lastSide').value = 1;
         }
-    } else if (lastUser!==user) {
+        document.getElementById('hiddenLastUser').value = user;
+    } else if (lastUser !== user) {
         if (lastSide === 0) {
             let div = document.createElement('div');
             div.className = 'd-flex justify-content-end mb-4';
@@ -117,7 +128,7 @@ connection.on("ReceiveMessage", function (user, message) {
         }
         document.getElementById('hiddenLastUser').value = user;
     }
-    
+
 });
 function formatDate(date) {
     var hours = date.getHours();
@@ -145,16 +156,19 @@ class Message {
         this.createdBy = createdBy;
     }
 }
-document.getElementById("buttonSend").addEventListener("click", function (event) {
-    let messageObj = new Message(document.getElementById("textMessage").value, document.getElementById("hiddenEventId").value, document.getElementById("hiddenName").value)
-    var json = JSON.stringify(messageObj);
-    var user = document.getElementById("hiddenName").value;
-    var message = document.getElementById("textMessage").value;
-    if (message !== null && message !== "") {
-        connection.invoke("SendMessage", user, json).catch(function (err) {
-            return console.error(err.toString());
-        });
-        event.preventDefault();
-    }
-    document.getElementById("textMessage").value = '';
-});
+if (document.getElementById("buttonSend")!=null) {
+
+    document.getElementById("buttonSend").addEventListener("click", function (event) {
+        let messageObj = new Message(document.getElementById("textMessage").value, document.getElementById("hiddenEventId").value, document.getElementById("hiddenName").value)
+        var json = JSON.stringify(messageObj);
+        var user = document.getElementById("hiddenName").value;
+        var message = document.getElementById("textMessage").value;
+        if (message !== null && message !== "") {
+            connection.invoke("SendMessage", user, json).catch(function (err) {
+                return console.error(err.toString());
+            });
+            event.preventDefault();
+        }
+        document.getElementById("textMessage").value = '';
+    });
+}

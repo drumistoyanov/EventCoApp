@@ -30,11 +30,12 @@ namespace EventCoApp.WebApp.Models.Extensions
             var destination = new BookingListItemViewModel
             {
                 Id = source.ID,
-
+                Event=source.Event.ToDetailsViewModel(),
                 RequestDate = source.CreatedOn,
                 EventId = source.EventId,
                 TicketCount = source.TicketCount,
-                WholePrice = source.TicketCount * source.Event.TicketPrice
+                WholePrice = source.TicketCount * source.Event.TicketPrice,
+                TicketPrice=source.Event.TicketPrice
             };
 
 

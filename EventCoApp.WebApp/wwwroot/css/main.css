@@ -2378,22 +2378,23 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 .primary-btn {
-  background: #f8b600;
-  line-height: 42px;
-  padding-left: 30px;
-  padding-right: 30px;
-  border: none;
-  color: #fff;
-  display: inline-block;
-  font-size: 14px;
-  font-weight: 500;
-  position: relative;
-  -webkit-transition: all 0.3s ease 0s;
-  -moz-transition: all 0.3s ease 0s;
-  -o-transition: all 0.3s ease 0s;
-  transition: all 0.3s ease 0s;
-  cursor: pointer;
-  position: relative;
+    background: #f8b600;
+    line-height: 42px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-radius: 0.25rem;
+    border: none;
+    color: #fff;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    position: relative;
+    -webkit-transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    position: relative;
 }
 
 .primary-btn:focus {
@@ -4547,6 +4548,13 @@ body.mobile-nav-active #mobile-nav-toggle {
     bottom: 8px;
     width: 100%;
     text-align: center;
+}
+
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 

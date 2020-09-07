@@ -16,19 +16,21 @@
     </div>
 </section>
 <!-- Start destinations Area -->
-<section class="destinations-area section-gap">
+<section class="destinations-area">
     <div class="container">
-        <div class="row d-flex justify-content-center">
-            <div class="menu-content pb-40 col-lg-8">
-                <div class="title text-center">
-                    <h1 class="mb-10">Popular Destinations</h1>
-                    <p>We all live in an age that belongs to the young at heart. Life that is becoming extremely fast, day to.</p>
-                </div>
+        <div class="row justify-content-center">
+            <div class="title text-center">
+                <h1 class="mb-10">Popular Destinations</h1>
+                <p>We all live in an age that belongs to the young at heart. Life that is becoming extremely fast, day to.</p>
             </div>
         </div>
         <div class="row">
-            @foreach (var item in Model)
+            @if (Model.Count() == 1)
             {
+                if (Model.FirstOrDefault().ErrorMessage == null)
+                {
+@foreach (var item in Model)
+{
 <div class="col-lg-4">
     <div class="single-destinations">
         <div class="thumb">
@@ -73,10 +75,23 @@
                     <span>Ticket price</span>
                     @if (@item.TicketPrice == 0)
                     {
-    <a asp-action="Create" asp-controller="Bookings" asp-route-id="@item.Id" class="price-btn">Free</a> }
+                        if (@item.TicketCount == 0)
+                        {
+<a class="price-btn ">Free</a> }
 else
 {
-<a  asp-action="Create" asp-controller="Bookings" asp-route-id="@item.Id" class="price-btn">@item.TicketPrice</a>}
+<a asp-action="Create" asp-controller="Bookings" asp-route-id="@item.Id" class="price-btn ">Free</a> }
+}
+else
+{
+if (@item.TicketCount == 0)
+{ <a class="price-btn">@item.TicketPrice</a>}
+
+else
+{ <a asp-action="Create" asp-controller="Bookings" asp-route-id="@item.Id" class="price-btn">@item.TicketPrice</a>}
+
+}
+
                 </li>
                 <li class="d-flex justify-content-between align-items-center">
                     <span>Tickets left</span>
@@ -90,7 +105,98 @@ else
             </ul>
         </div>
     </div>
-</div>      }
+</div>} }
+else
+{
+<div class="container">
+    <div class="justify-content-center">
+        <div class="title text-center">
+            <div>@Model.FirstOrDefault().ErrorMessage</div>
+            <a class="primary-btn text-uppercase" asp-area="" asp-controller="Home" asp-action="Index">Back</a>
+        </div>
+    </div>
+</div>}
+}
+else
+{
+@foreach (var item in Model)
+{
+<div class="col-lg-4">
+    <div class="single-destinations">
+        <div class="thumb">
+            @if (@item.Images != null && @item.Images.Count != 0)
+            {
+<img src='~/images/@item.Images.FirstOrDefault().ImageData' height="300" alt="">}
+        </div>
+        <div class="details">
+            <h4 class="d-flex justify-content-between">
+                <span>@item.Name</span>
+                @*<div class="star">
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star"></span>
+                    </div>*@
+            </h4>
+            @*<p>
+                    View on map   |   49 Reviews
+                </p>*@
+            <ul class="package-list">
+                <li class="d-flex justify-content-between align-items-center">
+                    <span>When</span>
+                    <span>@item.When</span>
+                </li>
+                <li class="d-flex justify-content-between align-items-center">
+                    <span>Type</span>
+                    <span>@item.EventType.Name</span>
+                </li>
+
+                <li class="d-flex justify-content-between align-items-center">
+                    <span>Creator</span>
+                    <span>@item.UserName</span>
+                </li>
+                <li class="d-flex justify-content-between align-items-center">
+                    <span>Seen</span>
+                    <span>@item.Counter</span>
+                </li>
+
+                <li class="d-flex justify-content-between align-items-center">
+                    <span>Ticket price</span>
+                    @if (@item.TicketPrice == 0)
+                    {
+                        if (@item.TicketCount == 0)
+                        {
+<a class="price-btn ">Free</a> }
+else
+{
+<a asp-action="Create" asp-controller="Bookings" asp-route-id="@item.Id" class="price-btn ">Free</a> }
+}
+else
+{
+if (@item.TicketCount == 0)
+{ <a class="price-btn">@item.TicketPrice</a>}
+
+else
+{ <a asp-action="Create" asp-controller="Bookings" asp-route-id="@item.Id" class="price-btn">@item.TicketPrice</a>}
+
+}
+
+                </li>
+                <li class="d-flex justify-content-between align-items-center">
+                    <span>Tickets left</span>
+                    <span>@item.TicketCount</span>
+                </li>
+                <li class="d-flex justify-content-between align-items-center">
+                    <span>Details</span>
+                    <a asp-action="Details" asp-route-id="@item.Id" data-toggle=tooltip data-placement=top title="Details"><i class="fa fa-eye"></i></a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>}}
+
         </div>
     </div>
 </section>
@@ -98,4 +204,3 @@ else
 @section Scripts {
     <script type="text/javascript">$("[data-toggle=tooltip]").tooltip();</script>
 }
-

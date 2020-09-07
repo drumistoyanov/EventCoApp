@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Identity;
 using EventCoApp.DataAccessLibrary.DataAccess;
 using Microsoft.AspNetCore.Hosting;
 using EventCoApp.DataAccessLibrary.Models;
+using NewsAPI;
+using NewsAPI.Models;
+using NewsAPI.Constants;
 
 namespace EventCoApp.WebApp.Controllers
 {
@@ -46,8 +49,36 @@ namespace EventCoApp.WebApp.Controllers
         }
         public IActionResult Index()
         {
+            var listNews = new List<NewsViewModel>();
+            var newsApiClient = new NewsApiClient("1a8cf277ffe84b368b0b8dc0f011e804");
+            var articlesResponse = newsApiClient.GetEverything(new EverythingRequest
+            {
+                Q = "Culture",
+                SortBy = SortBys.Popularity,
+                Language = Languages.EN,
+                From = DateTime.Now.Date
+            });
+            if (articlesResponse.Status == Statuses.Ok)
+            {
+              
+                // here's the first 20
+                foreach (var article in articlesResponse.Articles)
+                {
+                    var newArticle = new NewsViewModel()
+                    {
+                        Author = article.Author,
+                        PublishedAt = article.PublishedAt,
+                        Description = article.Description,
+                        Title = article.Title,
+                        Url = article.Url,
+                        UrlToImg = article.UrlToImage,
 
-            return View(new SearchEventsModel { Locations = GetLocationsList(), EventTypes = GetEventTypesList(), From = DateTime.Now, To = DateTime.Now });
+                    };
+                    listNews.Add(newArticle);
+                }
+            }
+
+            return View(new SearchEventsModel { Locations = GetLocationsList(), EventTypes = GetEventTypesList(), From = DateTime.Now, To = DateTime.Now,News=listNews });
         }
 
         public IActionResult Privacy()

@@ -20,5 +20,7 @@ namespace EventCoApp.WebApp.Models
         public int EventTypeId { get; set; }
         [Display(Name = "Types")]
         public IEnumerable<SelectListItem> EventTypes { get; set; }
+
+        public IEnumerable<NewsViewModel> News { get; set; }
     }
 }

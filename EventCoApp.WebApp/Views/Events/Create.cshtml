@@ -15,13 +15,15 @@
     </div>
 </section>
 <div class="container">
-    <h1>Create</h1>
-
-    <h4>Event</h4>
-    <hr />
     <div class="row">
-        <div class="col-md-4">
-            <form enctype="multipart/form-data" method="post">
+        <div class="col text-center">
+            <h1>Create Event</h1>
+            <hr />
+        </div>
+    </div>
+    <form enctype="multipart/form-data" method="post">
+        <div class="row">
+            <div class="col-md-6">
                 @Html.AntiForgeryToken()
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
@@ -29,46 +31,70 @@
                     @Html.EditorFor(m => m.Name, additionalViewData: new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
                 </div>
-
+            </div>
+            <div class="col-md-6">
                 <div class="form-group">
                     @Html.LabelFor(m => m.Description)
                     @Html.EditorFor(m => m.Description, additionalViewData: new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
                 <div class="form-group">
                     @Html.LabelFor(m => m.LocationId)
                     @Html.DropDownListFor(m => m.LocationId, Model.Locations, new { @class = "form-control" })
                 </div>
+            </div>
+            <div class="col-md-6">
                 <div class="form-group">
                     @Html.LabelFor(m => m.EventTypeId)
                     @Html.DropDownListFor(m => m.EventTypeId, Model.EventTypes, new { @class = "form-control" })
                 </div>
-
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
                 <div class="form-group">
                     @Html.LabelFor(m => m.When)
                     @Html.EditorFor(m => m.When, additionalViewData: new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(m => m.When, null, new { @class = "text-danger" })
                 </div>
+            </div>
+            <div class="col-md-6">
                 <div class="form-group">
                     @Html.LabelFor(m => m.TicketPrice)
                     @Html.EditorFor(m => m.TicketPrice, additionalViewData: new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(m => m.TicketPrice, null, new { @class = "text-danger" })
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
                 <div class="form-group">
                     @Html.LabelFor(m => m.TicketCount)
                     @Html.EditorFor(m => m.TicketCount, additionalViewData: new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(m => m.TicketCount, null, new { @class = "text-danger" })
                 </div>
+            </div>
+            <div class="col-md-6">
                 <div class="form-group">
+                    @Html.LabelFor(m => m.Images)
                     <input asp-for="ImagesFiles" type="file" multiple class="form-control" />
                     @Html.ValidationMessageFor(m => m.ImagesFiles, null, new { @class = "text-danger" })
                 </div>
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col text-center">
+                        <input type="submit" value="Create" class="primary-btn text-uppercase" />
+
+                    </div>
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

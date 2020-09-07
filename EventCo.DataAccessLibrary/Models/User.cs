@@ -31,6 +31,7 @@ namespace EventCoApp.DataAccessLibrary.Models
         public UserType UserType { get; set; }
 
         public DateTime DateOfRegistration { get; set; }
+        public bool IsSubscribed { get; set; } = false;
 
         public virtual ICollection<IdentityUserRole<int>> Roles { get; set; }
 

@@ -41,6 +41,7 @@ namespace EventCoApp.WebApp.Models.Extensions
             destination.When = source.When;
             destination.UserName = source.CreatedBy.UserName;
             destination.Counter = source.Counter;
+            destination.VisibleChat = source.VisibleChat;
 
             if (source.Messages != null)
             {

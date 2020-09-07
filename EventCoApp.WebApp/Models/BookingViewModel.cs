@@ -42,6 +42,9 @@ namespace EventCoApp.WebApp.Models
         [Range(typeof(decimal), "0.0", "79228162514264337593543950335")]
         [Column(TypeName = "decimal(18,2)")]
         public decimal WholePrice { get; set; }
+        [Range(typeof(decimal), "0.0", "79228162514264337593543950335")]
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal TicketPrice { get; set; }
         public EventDetailsViewModel Event { get; set; }
     }
 

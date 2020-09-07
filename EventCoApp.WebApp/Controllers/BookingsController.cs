@@ -31,10 +31,14 @@ namespace EventCoApp.WebApp.Controllers
             var pageNumber = page ?? 1;
 
             var pageSize = 50;
-
+            int userId = GetCurrentUserId();
             var bookings = _context.Bookings
                 .Include(b => b.Event)
-                .OrderByDescending(b => b.CreatedOn);
+                .ThenInclude(b => b.Location)
+                    .Include(b => b.Event)
+                .ThenInclude(b => b.CreatedBy)
+                .OrderByDescending(b => b.CreatedOn)
+                .Where(b => b.CreatedById == userId);
 
             var bookingsPage = bookings
                 .Skip((pageNumber - 1) * pageSize)
@@ -47,7 +51,7 @@ namespace EventCoApp.WebApp.Controllers
             return View(bookingsPage.ToListViewModel());
         }
 
-        [Authorize(Roles="Creator, User, Master")]
+        [Authorize(Roles = "Creator, User, Master")]
         public async Task<IActionResult> Details(int id)
         {
             //if (!HasPermission("VIEW_BOOKINGS"))
@@ -57,7 +61,9 @@ namespace EventCoApp.WebApp.Controllers
 
             var booking = await _context.Bookings
                 .Include(e => e.Event)
-                .ThenInclude(e=>e.Location)
+                .ThenInclude(e => e.CreatedBy)
+                .Include(e => e.Event)
+                .ThenInclude(e => e.Location)
                 .Include(e => e.CreatedBy)
                 .SingleAsync(b => b.ID == id);
             if (booking == null)

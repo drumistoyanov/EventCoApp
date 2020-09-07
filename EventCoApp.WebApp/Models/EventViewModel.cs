@@ -28,13 +28,14 @@ namespace EventCoApp.WebApp.Models
         [Required]
         [Display(Name = "When Is")]
         public DateTime When { get; set; }
-        [Display(Name = "Created By")]
+        [Display(Name = "Images")]
         public List<Image> Images { get; set; }
         public List<IFormFile> ImagesFiles { get; set; }
         [Display(Name = "Ticket Price")]
         public decimal TicketPrice { get; set; }
         [Display(Name = "Ticket Count")]
         public int TicketCount { get; set; }
+        [Display(Name = "Created By")]
         public string UserName { get; set; }
         public int CreatedById { get; set; }
         [Display(Name="Seen")]
@@ -76,6 +77,7 @@ namespace EventCoApp.WebApp.Models
         [Display(Name = "Type")]
         public EventTypeListItemViewModel EventType { get; set; }
         public List<MessageListViewModel> Messages { get; set; }
+        public bool VisibleChat { get; set; }
     }
 
     public class EventListItemViewModel
@@ -108,5 +110,7 @@ namespace EventCoApp.WebApp.Models
 
         [Display(Name = "Type")]
         public EventTypeListItemViewModel EventType { get; set; }
+
+        public string ErrorMessage { get; set; }
     }
 }

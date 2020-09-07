@@ -7,11 +7,18 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200827133009_1.cs" />
     <Compile Remove="Migrations\20200827133009_1.Designer.cs" />
+    <Compile Remove="Migrations\20200905143246_descripion size.cs" />
+    <Compile Remove="Migrations\20200905143246_descripion size.Designer.cs" />
+    <Compile Remove="Migrations\20200905143346_zsze es.cs" />
+    <Compile Remove="Migrations\20200905143346_zsze es.Designer.cs" />
+    <Compile Remove="Migrations\20200905143533_Description size.cs" />
+    <Compile Remove="Migrations\20200905143533_Description size.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.7" />
+    <PackageReference Include="NewsletterSub" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>

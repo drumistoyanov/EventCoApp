@@ -17,10 +17,10 @@ namespace EventCoApp.DataAccessLibrary.Models
             Bookings = new HashSet<Booking>();
         }
         [Required]
-        [Column(TypeName = "nvarchar(50)")]
+        [Column(TypeName = "nvarchar(500)")]
         public string Name { get; set; }
         [Required]
-        [Column(TypeName = "nvarchar(1000)")]
+        [Column(TypeName = "nvarchar(max)")]
         public string Description { get; set; }
         public int LocationId { get; set; }
         public Location Location { get; set; }
@@ -33,6 +33,7 @@ namespace EventCoApp.DataAccessLibrary.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal TicketPrice { get; set; } = 0;
         public int Counter { get; set; } = 0;
+        public bool VisibleChat { get; set; } = true;
         public virtual ICollection<Image> Images { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }
         public virtual ICollection<Booking> Bookings { get; set; }

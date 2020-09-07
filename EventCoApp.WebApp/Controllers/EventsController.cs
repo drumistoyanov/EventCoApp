@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,7 +40,17 @@ namespace EventCoApp.WebApp.Controllers
                 .Include(e => e.EventType)
                 .Include(e => e.Location)
                 .Include(e => e.Tickets)
-                .OrderByDescending(b => b.When);
+                .OrderByDescending(e => e.Counter)
+                .ThenByDescending(e => e.When);
+
+            foreach (var item in events)
+            {
+                if (item.When <= DateTime.Now)
+                {
+                    item.TicketCount = 0;
+                    item.Description = "Event ended";
+                }
+            }
 
             var eventsPage = events
                 .Skip((pageNumber - 1) * pageSize)
@@ -67,7 +78,8 @@ namespace EventCoApp.WebApp.Controllers
               .Include(e => e.Location)
               .Include(e => e.Tickets)
               .Where(e => e.When >= model.From && e.When <= model.To && e.EventTypeId == model.EventTypeId)
-              .OrderByDescending(b => b.When);
+              .OrderByDescending(e => e.Counter)
+              .ThenByDescending(e => e.When);
             }
             else
             {
@@ -78,7 +90,16 @@ namespace EventCoApp.WebApp.Controllers
                    .Include(e => e.Location)
                    .Include(e => e.Tickets)
                    .Where(e => e.LocationId == model.LocationId && e.When >= model.From && e.When <= model.To && e.EventTypeId == model.EventTypeId)
-                   .OrderByDescending(b => b.When);
+                   .OrderByDescending(e => e.Counter)
+                   .ThenByDescending(e => e.When);
+            }
+            foreach (var item in events)
+            {
+                if (item.When <= DateTime.Now)
+                {
+                    item.TicketCount = 0;
+                    item.Description = "Event ended";
+                }
             }
             var eventsPage = events
                 .Skip((pageNumber - 1) * pageSize)
@@ -88,7 +109,20 @@ namespace EventCoApp.WebApp.Controllers
             ViewData["PageSize"] = pageSize;
             ViewData["TotalItemCount"] = events.Count();
 
-            return View(eventsPage.ToListViewModel());
+            if (eventsPage.Count!=0)
+            {
+                return View(eventsPage.ToListViewModel());
+            }
+            else
+            {
+                var eventt = new EventListItemViewModel() { ErrorMessage = $"No events from {model.From} to {model.To} for your criretia"};
+                var list = new List<EventListItemViewModel>
+                {
+                    eventt
+                };
+                return View(list);
+            }
+
         }
 
         private IEnumerable<SelectListItem> GetLocationsList()
@@ -244,6 +278,36 @@ namespace EventCoApp.WebApp.Controllers
             }
 
             return View(eventt.ToDetailsViewModel());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> HideShow(int id)
+        {
+            var eventt = await _context.Events
+                .Include(e => e.CreatedBy)
+                .Include(e => e.Images)
+                .Include(e => e.EventType)
+                .Include(e => e.Location)
+                .Include(e => e.Messages)
+                .ThenInclude(e => e.CreatedBy)
+                .SingleAsync(e => e.ID == id);
+            bool isAuthenticated = User.Identity.IsAuthenticated;
+            if (eventt.VisibleChat == false)
+            {
+                eventt.VisibleChat = true;
+            }
+            else
+            {
+                eventt.VisibleChat = false;
+            }
+            await _context.SaveChangesAsync();
+
+            if (eventt == null)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction("Details", "Events", new { id });
         }
     }
 }

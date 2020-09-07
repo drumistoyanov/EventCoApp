@@ -79,7 +79,7 @@ namespace EventCoApp.DataAccessLibrary.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(1000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("EventTypeId")
                         .HasColumnType("int");
@@ -98,13 +98,16 @@ namespace EventCoApp.DataAccessLibrary.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("TicketCount")
                         .HasColumnType("int");
 
                     b.Property<decimal>("TicketPrice")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("VisibleChat")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("When")
                         .HasColumnType("datetime");
@@ -466,6 +469,9 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
+
+                    b.Property<bool>("IsSubscribed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
