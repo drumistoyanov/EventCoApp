@@ -1,6 +1,7 @@
 ﻿using EventCoApp.DataAccessLibrary.DataAccess;
 using EventCoApp.DataAccessLibrary.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,7 @@ namespace EventCoApp.WebApp.Controllers
             _context = context;
             _hostingEnvironment = hostingEnvironment;
         }
+        protected readonly IHttpContextAccessor _accessor;
         protected readonly UserManager<User> _userManager;
         protected EventCoContext _context;
         protected readonly IWebHostEnvironment _hostingEnvironment;
@@ -82,7 +84,7 @@ namespace EventCoApp.WebApp.Controllers
                 roleIds.Add(rolePermission.RoleId);
             }
 
-            var userRoles = _context.UserRoles.Where(u=>u.UserId==user.Id) ;
+            var userRoles = _context.UserRoles.Where(u => u.UserId == user.Id);
 
             foreach (var userRole in userRoles)
             {

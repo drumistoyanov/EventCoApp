@@ -34,7 +34,7 @@ namespace EventCoApp.WebApp.Controllers
             }
         }
 
-        private EventCoContext _context;
+        private readonly EventCoContext _context;
 
         public InstallController(
             EventCoContext context,

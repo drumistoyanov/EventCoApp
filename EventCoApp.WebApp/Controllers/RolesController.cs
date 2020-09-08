@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using EventCoApp.Common.Helpers;
 using EventCoApp.DataAccessLibrary.DataAccess;
 using EventCoApp.DataAccessLibrary.Models;
 using EventCoApp.WebApp.Models;
 using EventCoApp.WebApp.Models.Extensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,20 +21,21 @@ namespace EventCoApp.WebApp.Controllers
     public class RolesController : BaseController
     {
         private readonly RoleManager<Role> _roleManager;
-        private readonly ILogger _logger;
+        private readonly ILogger<RolesController> _logger;
 
         public RolesController(
-            UserManager<User> userManager, RoleManager<Role> roleManager, ILoggerFactory loggerFactory, EventCoContext context) : base(userManager, context)
+            UserManager<User> userManager, RoleManager<Role> roleManager, EventCoContext context, ILogger<RolesController> logger) : base(userManager, context)
         {
             _roleManager = roleManager;
-            _logger = loggerFactory.CreateLogger<RolesController>();
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index()
         {
             if (!HasPermission("VIEW_ROLES"))
             {
-                return Unauthorized();
+                _logger.LogInformation("AccessDenied");
+                return AccessDenied();
             }
 
             var roles = _roleManager.Roles;
@@ -42,19 +46,22 @@ namespace EventCoApp.WebApp.Controllers
         {
             if (!HasPermission("VIEW_ROLES"))
             {
-                return Unauthorized();
+                _logger.LogInformation("AccessDenied");
+                return AccessDenied();
             }
 
             if (id == null)
             {
-                return NotFound();
+                _logger.LogWarning("Not found");
+                return Error("Not found", "Roles");
             }
 
             var role = await _roleManager.Roles.Include(r => r.RolePermissions).FirstOrDefaultAsync(r => r.Id == id);
 
             if (role == null)
             {
-                return NotFound();
+                _logger.LogWarning("Not found");
+                return Error("Not found", "Roles");
             }
 
             return View(role);
@@ -64,7 +71,8 @@ namespace EventCoApp.WebApp.Controllers
         {
             if (!HasPermission("CREATE_ROLES"))
             {
-                return Unauthorized();
+                _logger.LogInformation("AccessDenied");
+                return AccessDenied();
             }
 
             ViewBag.PermissionGroups = PermissionGroup.GetList();
@@ -78,7 +86,8 @@ namespace EventCoApp.WebApp.Controllers
         {
             if (!HasPermission("CREATE_ROLES"))
             {
-                return Unauthorized();
+                _logger.LogInformation("AccessDenied");
+                return AccessDenied();
             }
 
             if (ModelState.IsValid)
@@ -89,10 +98,11 @@ namespace EventCoApp.WebApp.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index","Home");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
+                    _logger.LogWarning(string.Join(',',result.Errors));
                     AddErrors(result);
                 }
             }
@@ -107,19 +117,22 @@ namespace EventCoApp.WebApp.Controllers
         {
             if (!HasPermission("EDIT_ROLES"))
             {
-                return Unauthorized();
+                _logger.LogInformation("AccessDenied");
+                return AccessDenied();
             }
 
             if (id == null)
             {
-                return NotFound();
+                _logger.LogWarning("Not found");
+                return Error("Not found", "Roles");
             }
 
             var role = await _roleManager.Roles.Include(r => r.RolePermissions).FirstOrDefaultAsync(r => r.Id == id.Value);
 
             if (role == null)
             {
-                return NotFound();
+                _logger.LogWarning("Not found");
+                return Error("Not found", "Roles");
             }
 
             ViewBag.PermissionGroups = PermissionGroup.GetList();
@@ -134,14 +147,16 @@ namespace EventCoApp.WebApp.Controllers
         {
             if (!HasPermission("EDIT_ROLES"))
             {
-                return Unauthorized();
+                _logger.LogInformation("AccessDenied");
+                return AccessDenied();
             }
 
             var role = await _roleManager.Roles.Include(r => r.RolePermissions).FirstOrDefaultAsync(r => r.Id == model.Id);
 
             if (role == null)
             {
-                return NotFound();
+                _logger.LogWarning("Not found");
+                return Error("Not found", "Roles");
             }
 
             if (ModelState.IsValid)
@@ -156,6 +171,7 @@ namespace EventCoApp.WebApp.Controllers
                 }
                 else
                 {
+                    _logger.LogWarning("Not found");
                     AddErrors(result);
                 }
             }
@@ -171,19 +187,22 @@ namespace EventCoApp.WebApp.Controllers
         {
             if (!HasPermission("DELETE_ROLES"))
             {
-                return Unauthorized();
+                _logger.LogInformation("AccessDenied");
+                return AccessDenied();
             }
 
             if (id == null)
             {
-                return NotFound();
+                _logger.LogWarning("Not found");
+                return Error("Not found", "Roles");
             }
 
             var role = await _roleManager.FindByIdAsync(id.ToString());
 
             if (role == null)
             {
-                return NotFound();
+                _logger.LogWarning("Not found");
+                return Error("Not found", "Roles");
             }
 
             return View(role);
@@ -195,7 +214,8 @@ namespace EventCoApp.WebApp.Controllers
         {
             if (!HasPermission("DELETE_ROLES"))
             {
-                return Unauthorized();
+                _logger.LogInformation("AccessDenied");
+                return AccessDenied();
             }
 
             var role = await _roleManager.FindByIdAsync(id.ToString());
@@ -203,6 +223,12 @@ namespace EventCoApp.WebApp.Controllers
             await _roleManager.DeleteAsync(role);
 
             return RedirectToAction("Index");
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error(string message, string page)
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Message = message, Page = page }); ;
         }
     }
 }

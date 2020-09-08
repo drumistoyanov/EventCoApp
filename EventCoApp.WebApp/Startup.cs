@@ -20,6 +20,9 @@ using EventCoApp.Services.Middlewares;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using EventCoApp.Common.Helpers;
 using EventCoApp.WebApp.Hubs;
+using Microsoft.Extensions.Logging;
+using System.Net;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace EventCoApp.WebApp
 {
@@ -88,6 +91,19 @@ namespace EventCoApp.WebApp
                 facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
             });
 
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(500000);
+            });
+
+            services.AddCloudscribePagination();
+
+            services.AddMvc();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("HasPermission", policy => policy.Requirements.Add(new Helpers.AuthorizationPolicies.HasPermissionRequirement()));
+            });
             //SendGrid
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
@@ -111,7 +127,7 @@ namespace EventCoApp.WebApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -120,11 +136,11 @@ namespace EventCoApp.WebApp
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            loggerFactory.AddFile("Logs/log_{Date}.txt");
 
             //UncommentForCreatingRoles
             //roleManager.EnsureRolesCreated().Wait();

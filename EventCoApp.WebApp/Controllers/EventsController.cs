@@ -11,8 +11,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -23,13 +25,15 @@ namespace EventCoApp.WebApp.Controllers
 {
     public class EventsController : BaseController
     {
+        private readonly ILogger<EventsController> _logger;
         public EventsController(
-           UserManager<User> userManager, EventCoContext context, IWebHostEnvironment hostEnvironment) : base(userManager, context, hostEnvironment)
+           UserManager<User> userManager, EventCoContext context, IWebHostEnvironment hostEnvironment, ILogger<EventsController> logger) : base(userManager, context, hostEnvironment)
         {
+            _logger = logger;
         }
         public IActionResult Index(int? page)
         {
-
+            _logger.LogInformation("Opened Index() page");
             var pageNumber = page ?? 1;
 
             var pageSize = 50;
@@ -109,13 +113,13 @@ namespace EventCoApp.WebApp.Controllers
             ViewData["PageSize"] = pageSize;
             ViewData["TotalItemCount"] = events.Count();
 
-            if (eventsPage.Count!=0)
+            if (eventsPage.Count != 0)
             {
                 return View(eventsPage.ToListViewModel());
             }
             else
             {
-                var eventt = new EventListItemViewModel() { ErrorMessage = $"No events from {model.From} to {model.To} for your criretia"};
+                var eventt = new EventListItemViewModel() { ErrorMessage = $"No events from {model.From} to {model.To} for your criretia" };
                 var list = new List<EventListItemViewModel>
                 {
                     eventt
@@ -151,7 +155,8 @@ namespace EventCoApp.WebApp.Controllers
         {
             if (!HasPermission("CREATE_EVENTS"))
             {
-                return Unauthorized();
+                _logger.LogInformation("AccessDenied");
+                return AccessDenied();
             }
             return View(new EventViewModel { Locations = GetLocationsList(), EventTypes = GetEventTypesList(), When = DateTime.Now });
         }
@@ -161,7 +166,8 @@ namespace EventCoApp.WebApp.Controllers
         {
             if (!HasPermission("CREATE_EVENTS"))
             {
-                return Unauthorized();
+                _logger.LogInformation("AccessDenied");
+                return AccessDenied();
             }
 
             if (ModelState.IsValid)
@@ -202,9 +208,6 @@ namespace EventCoApp.WebApp.Controllers
             model.EventTypes = GetEventTypesList();
             model.When = DateTime.Now;
 
-
-
-
             return View(model);
         }
         private string UploadedFile(IFormFile image)
@@ -216,10 +219,8 @@ namespace EventCoApp.WebApp.Controllers
                 string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "images");
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + image.FileName;
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    image.CopyTo(fileStream);
-                }
+                using var fileStream = new FileStream(filePath, FileMode.Create);
+                image.CopyTo(fileStream);
             }
             return uniqueFileName;
         }
@@ -236,6 +237,12 @@ namespace EventCoApp.WebApp.Controllers
                 .ThenInclude(e => e.CreatedBy)
                 .SingleAsync(e => e.ID == id);
             bool isAuthenticated = User.Identity.IsAuthenticated;
+
+            if (eventt == null)
+            {
+                _logger.LogError("Error showing event details");
+                return Error("Error showing event details", "Events"); ;
+            }
             if (isAuthenticated)
             {
                 userId = GetCurrentUserId().ToString();
@@ -272,10 +279,6 @@ namespace EventCoApp.WebApp.Controllers
                     await _context.SaveChangesAsync();
                 }
             }
-            if (eventt == null)
-            {
-                return NotFound();
-            }
 
             return View(eventt.ToDetailsViewModel());
         }
@@ -292,6 +295,13 @@ namespace EventCoApp.WebApp.Controllers
                 .ThenInclude(e => e.CreatedBy)
                 .SingleAsync(e => e.ID == id);
             bool isAuthenticated = User.Identity.IsAuthenticated;
+
+
+            if (eventt == null)
+            {
+                _logger.LogError("Error changing chat visability");
+                return Error("Error changing chat visability","Events" );
+            }
             if (eventt.VisibleChat == false)
             {
                 eventt.VisibleChat = true;
@@ -302,12 +312,12 @@ namespace EventCoApp.WebApp.Controllers
             }
             await _context.SaveChangesAsync();
 
-            if (eventt == null)
-            {
-                return NotFound();
-            }
-
             return RedirectToAction("Details", "Events", new { id });
+        }
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error(string message, string page)
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Message = message, Page = page }); ;
         }
     }
 }

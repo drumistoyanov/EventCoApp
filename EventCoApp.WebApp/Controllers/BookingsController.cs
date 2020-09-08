@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
@@ -8,16 +9,20 @@ using EventCoApp.DataAccessLibrary.Models;
 using EventCoApp.WebApp.Models;
 using EventCoApp.WebApp.Models.Extensions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace EventCoApp.WebApp.Controllers
 {
     public class BookingsController : BaseController
     {
-        public BookingsController(UserManager<User> userManager, EventCoContext context) : base(userManager, context)
+        private readonly ILogger<EventsController> _logger;
+        public BookingsController(UserManager<User> userManager, EventCoContext context, ILogger<EventsController> logger) : base(userManager, context)
         {
+            _logger = logger;
         }
 
         [Authorize]
@@ -25,7 +30,8 @@ namespace EventCoApp.WebApp.Controllers
         {
             if (!HasPermission("VIEW_BOOKINGS"))
             {
-                return Unauthorized();
+                _logger.LogInformation("AccessDenied");
+                return AccessDenied();
             }
 
             var pageNumber = page ?? 1;
@@ -54,10 +60,11 @@ namespace EventCoApp.WebApp.Controllers
         [Authorize(Roles = "Creator, User, Master")]
         public async Task<IActionResult> Details(int id)
         {
-            //if (!HasPermission("VIEW_BOOKINGS"))
-            //{
-            //    return Unauthorized();
-            //}
+            if (!HasPermission("VIEW_BOOKINGS"))
+            {
+                _logger.LogInformation("AccessDenied");
+                return AccessDenied();
+            }
 
             var booking = await _context.Bookings
                 .Include(e => e.Event)
@@ -68,7 +75,9 @@ namespace EventCoApp.WebApp.Controllers
                 .SingleAsync(b => b.ID == id);
             if (booking == null)
             {
-                return NotFound();
+                _logger.LogError("Error showing booking details");
+                return Error("Error showing booking details", "Bookings"); ;
+
             }
 
             return View(booking.ToDetailsViewModel());
@@ -78,10 +87,11 @@ namespace EventCoApp.WebApp.Controllers
         [Authorize]
         public IActionResult Create(int id)
         {
-            //if (!HasPermission("CREATE_BOOKINGS"))
-            //{
-            //    return Unauthorized();
-            //}
+            if (!HasPermission("CREATE_BOOKINGS"))
+            {
+                _logger.LogInformation("AccessDenied");
+                return AccessDenied();
+            }
 
             var @event = _context.Events
                 .Include(e => e.Location)
@@ -102,10 +112,11 @@ namespace EventCoApp.WebApp.Controllers
         [Authorize]
         public async Task<IActionResult> Create(BookingViewModel model)
         {
-            //if (!HasPermission("CREATE_BOOKINGS"))
-            //{
-            //    return Unauthorized();
-            //}
+            if (!HasPermission("CREATE_BOOKINGS"))
+            {
+                _logger.LogInformation("AccessDenied");
+                return AccessDenied();
+            }
 
             if (ModelState.IsValid)
             {
@@ -120,7 +131,8 @@ namespace EventCoApp.WebApp.Controllers
                 model.Event = @event.ToDetailsViewModel();
                 if (ticketsLeft < model.TicketCount)
                 {
-                    ModelState.AddModelError("wrong", "Please Select");
+                    _logger.LogError("Wrong tickets count");
+                    ModelState.AddModelError("Wrong", "Please Select");
 
                     return View(new BookingViewModel() { Event = @event.ToDetailsViewModel(), TicketCountLeft = ticketsLeft, TicketPrice = ticketPrice });
                 }
@@ -278,6 +290,11 @@ namespace EventCoApp.WebApp.Controllers
         //    await _context.SaveChangesAsync();
         //    return RedirectToAction("Index");
         //}
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error(string message, string page)
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Message = message, Page = page }); ;
+        }
     }
 }
 
