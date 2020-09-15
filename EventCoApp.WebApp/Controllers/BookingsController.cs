@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using EventCoApp.DataAccessLibrary.DataAccess;
+﻿using EventCoApp.DataAccessLibrary.DataAccess;
 using EventCoApp.DataAccessLibrary.Models;
 using EventCoApp.WebApp.Models;
 using EventCoApp.WebApp.Models.Extensions;
@@ -14,6 +8,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace EventCoApp.WebApp.Controllers
 {
@@ -34,11 +33,11 @@ namespace EventCoApp.WebApp.Controllers
                 return AccessDenied();
             }
 
-            var pageNumber = page ?? 1;
+            int pageNumber = page ?? 1;
 
-            var pageSize = 50;
+            int pageSize = 50;
             int userId = GetCurrentUserId();
-            var bookings = _context.Bookings
+            IQueryable<Booking> bookings = _context.Bookings
                 .Include(b => b.Event)
                 .ThenInclude(b => b.Location)
                     .Include(b => b.Event)
@@ -46,7 +45,7 @@ namespace EventCoApp.WebApp.Controllers
                 .OrderByDescending(b => b.CreatedOn)
                 .Where(b => b.CreatedById == userId);
 
-            var bookingsPage = bookings
+            List<Booking> bookingsPage = bookings
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize).ToList();
 
@@ -66,7 +65,7 @@ namespace EventCoApp.WebApp.Controllers
                 return AccessDenied();
             }
 
-            var booking = await _context.Bookings
+            Booking booking = await _context.Bookings
                 .Include(e => e.Event)
                 .ThenInclude(e => e.CreatedBy)
                 .Include(e => e.Event)
@@ -93,14 +92,14 @@ namespace EventCoApp.WebApp.Controllers
                 return AccessDenied();
             }
 
-            var @event = _context.Events
+            EventDetailsViewModel @event = _context.Events
                 .Include(e => e.Location)
                 .Include(e => e.CreatedBy)
                 .FirstOrDefault(e => e.ID == id).ToDetailsViewModel();
-            var ticketPrice = _context.Events
+            decimal ticketPrice = _context.Events
                 .FirstOrDefault(e => e.ID == id).TicketPrice;
 
-            var ticketsLeft = _context.Events
+            int ticketsLeft = _context.Events
                 .FirstOrDefault(e => e.ID == id).TicketCount;
 
 
@@ -120,11 +119,11 @@ namespace EventCoApp.WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                var @event = await _context.Events.Include(x => x.Location).Include(x => x.CreatedBy).FirstAsync(x => x.ID == model.Id);
-                var ticketPrice = _context.Events
+                Event @event = await _context.Events.Include(x => x.Location).Include(x => x.CreatedBy).FirstAsync(x => x.ID == model.Id);
+                decimal ticketPrice = _context.Events
                .FirstOrDefault(e => e.ID == model.Id).TicketPrice;
 
-                var ticketsLeft = _context.Events
+                int ticketsLeft = _context.Events
                     .FirstOrDefault(e => e.ID == model.Id).TicketCount;
                 model.TicketPrice = ticketPrice;
                 model.TicketCountLeft = ticketsLeft;
@@ -137,7 +136,7 @@ namespace EventCoApp.WebApp.Controllers
                     return View(new BookingViewModel() { Event = @event.ToDetailsViewModel(), TicketCountLeft = ticketsLeft, TicketPrice = ticketPrice });
                 }
                 model.EventId = @event.ID;
-                var booking = model.ToEntity();
+                Booking booking = model.ToEntity();
 
                 booking.CreatedOn = DateTime.Now;
 
@@ -154,14 +153,14 @@ namespace EventCoApp.WebApp.Controllers
                 return RedirectToAction("Details", "Bookings", new { id = booking.ID });
             }
 
-            var @event1 = _context.Events
+            EventDetailsViewModel @event1 = _context.Events
               .Include(e => e.Location)
               .Include(e => e.CreatedBy)
               .FirstOrDefault(e => e.ID == model.Id).ToDetailsViewModel();
-            var ticketPrice1 = _context.Events
+            decimal ticketPrice1 = _context.Events
                 .FirstOrDefault(e => e.ID == model.Id).TicketPrice;
 
-            var ticketsLeft1 = _context.Events
+            int ticketsLeft1 = _context.Events
                 .FirstOrDefault(e => e.ID == model.Id).TicketCount;
 
 

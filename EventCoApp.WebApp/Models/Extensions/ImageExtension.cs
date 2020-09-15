@@ -1,8 +1,5 @@
 ﻿using EventCoApp.DataAccessLibrary.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EventCoApp.WebApp.Models.Extensions
 {
@@ -10,23 +7,24 @@ namespace EventCoApp.WebApp.Models.Extensions
     {
         public static ImageViewModel ToViewModel(this Image source)
         {
-            var destination = new ImageViewModel();
+            ImageViewModel destination = new ImageViewModel
+            {
+                ImageData = source.ImageData,
+                EventId = source.EventId,
 
-            destination.ImageData = source.ImageData;
-            destination.EventId = source.EventId;
-
-            destination.CreatedOn = source.CreatedOn;
+                CreatedOn = source.CreatedOn
+            };
 
             return destination;
         }
 
         public static ImageDetailsViewModel ToDetailsViewModel(this Image source)
         {
-            var destination = new ImageDetailsViewModel();
-
-
-            destination.ImageData = source.ImageData;
-            destination.EventId = source.EventId;
+            ImageDetailsViewModel destination = new ImageDetailsViewModel
+            {
+                ImageData = source.ImageData,
+                EventId = source.EventId
+            };
 
 
             return destination;
@@ -34,13 +32,13 @@ namespace EventCoApp.WebApp.Models.Extensions
 
         public static Image ToEntity(this ImageViewModel source)
         {
-            var destination = new Image();
-
-
-            destination.ImageData = source.ImageData;
-            destination.EventId = source.EventId;
-            destination.CreatedById = source.CreatedById;
-            destination.CreatedOn = source.CreatedOn;
+            Image destination = new Image
+            {
+                ImageData = source.ImageData,
+                EventId = source.EventId,
+                CreatedById = source.CreatedById,
+                CreatedOn = source.CreatedOn
+            };
 
             return destination;
         }
@@ -61,11 +59,11 @@ namespace EventCoApp.WebApp.Models.Extensions
 
         public static List<ImageListItemViewModel> ToListViewModel(this List<Image> source)
         {
-            var imageListItems = new List<ImageListItemViewModel>();
+            List<ImageListItemViewModel> imageListItems = new List<ImageListItemViewModel>();
 
             if (source != null)
             {
-                foreach (var item in source)
+                foreach (Image item in source)
                 {
                     imageListItems.Add(item.ToListItemViewModel());
                 }
@@ -76,11 +74,12 @@ namespace EventCoApp.WebApp.Models.Extensions
 
         public static ImageListItemViewModel ToListItemViewModel(this Image source)
         {
-            var image = new ImageListItemViewModel();
-
-            image.ImageData = source.ImageData;
-            image.EventId = source.EventId;
-            image.CreatedById = source.CreatedById.Value;
+            ImageListItemViewModel image = new ImageListItemViewModel
+            {
+                ImageData = source.ImageData,
+                EventId = source.EventId,
+                CreatedById = source.CreatedById.Value
+            };
 
             return image;
         }

@@ -14,11 +14,11 @@ namespace EventCoApp.DataAccessLibrary.Models
         public User()
         {
             Roles = new HashSet<IdentityUserRole<int>>();
-            Claims = new HashSet<IdentityUserClaim<string>>();
             Logins = new HashSet<IdentityUserLogin<int>>();
             CreatedEvents = new HashSet<Event>();
             Messages = new HashSet<Message>();
             Bookings = new HashSet<Booking>();
+            News = new HashSet<News>();
         }
         [Required]
         [StringLength(50, MinimumLength = 2)]
@@ -32,15 +32,14 @@ namespace EventCoApp.DataAccessLibrary.Models
 
         public DateTime DateOfRegistration { get; set; }
         public bool IsSubscribed { get; set; } = false;
+        public string ProfilePicture { get; set; }
 
         public virtual ICollection<IdentityUserRole<int>> Roles { get; set; }
-
-        public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
-
         public virtual ICollection<IdentityUserLogin<int>> Logins { get; set; }
         public virtual ICollection<UserPermission> UserPermissions { get; set; }
         public virtual ICollection<Booking> Bookings { get; set; }
         public virtual ICollection<Event> CreatedEvents { get; set; }
         public virtual ICollection<Message> Messages { get; set; }
+        public virtual ICollection<News> News { get; set; }
     }
 }

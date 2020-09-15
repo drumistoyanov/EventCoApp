@@ -36,7 +36,7 @@ namespace EventCoApp.WebApp.Controllers
             _logger.LogInformation("Opened Index() page");
             var pageNumber = page ?? 1;
 
-            var pageSize = 50;
+            var pageSize = 6;
 
             var events = _context.Events
                 .Include(e => e.CreatedBy)
@@ -72,7 +72,7 @@ namespace EventCoApp.WebApp.Controllers
             int? page = 1;
             var pageNumber = page ?? 1;
             IQueryable<Event> events = null;
-            var pageSize = 50;
+            var pageSize = 6;
             if (model.LocationId == 9999)
             {
                 events = _context.Events

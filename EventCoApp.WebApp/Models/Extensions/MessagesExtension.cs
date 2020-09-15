@@ -26,7 +26,11 @@ namespace EventCoApp.WebApp.Models.Extensions
             
             destination.EventId = source.EventId;
             destination.Content = source.Content;
-            destination.CreatedBy = source.CreatedBy.UserName;
+            if (source.CreatedBy.ProfilePicture==null)
+            {
+                source.CreatedBy.ProfilePicture = "profilePicture.png";
+            }
+            destination.CreatedBy = source.CreatedBy;
             destination.CreatedById = source.CreatedById.Value;
             destination.When = source.CreatedOn;
 

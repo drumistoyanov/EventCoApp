@@ -12,14 +12,6 @@ namespace EventCoApp.DataAccessLibrary.Common
         public User? CreatedBy { get; set; }
         [ForeignKey("CreatedById")]
         public int? CreatedById { get; set; }
-#nullable disable
-        public DateTime? ModifiedOn { get; set; }
-#nullable enable
-        public User? ModifiedBy { get; set; }
-        [ForeignKey("ModifiedById")]
-        public int? ModifiedById { get; set; }
-#nullable disable
         public bool IsDeleted { get; set; } = false;
-
     }
 }

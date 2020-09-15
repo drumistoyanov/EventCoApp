@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using EventCoApp.Common.Helpers;
 using EventCoApp.DataAccessLibrary.DataAccess;
 using EventCoApp.DataAccessLibrary.Models;
+using EventCoApp.Models.Extensions;
 using EventCoApp.WebApp.Models;
 using EventCoApp.WebApp.Models.Extensions;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +15,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SwiftCourier.Models.Extensions;
 
 namespace EventCoApp.WebApp.Controllers
 {

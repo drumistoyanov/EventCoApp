@@ -17,22 +17,14 @@ namespace EventCoApp.WebApp.Areas.Identity.Pages.Account.Manage
     public partial class EmailModel : PageModel
     {
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
-
-        public EmailModel(SignInManager<User> signInManager)
-        {
-            _signInManager = signInManager;
-        }
 
         private readonly IEmailSender _emailSender;
 
         public EmailModel(
             UserManager<User> userManager,
-            SignInManager<User> signInManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _emailSender = emailSender;
         }
 

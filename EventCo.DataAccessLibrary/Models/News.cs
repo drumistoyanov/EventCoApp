@@ -14,6 +14,9 @@ namespace EventCoApp.DataAccessLibrary.Models
         [Required]
         [Column(TypeName = "nvarchar(1000)")]
         public string Description { get; set; }
-        public virtual  ICollection<Image> Images { get; set; }
+        public virtual ICollection<Image> Images { get; set; }
+        public bool Approved { get; set; } = false;
+        public int Counter { get; set; } = 0;
+        public string Name { get; set; }
     }
 }

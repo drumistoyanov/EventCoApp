@@ -15,8 +15,6 @@ namespace EventCoApp.DataAccessLibrary.Models
         {
             RolePermissions = new HashSet<RolePermission>();
         }
-
-
         public virtual ICollection<RolePermission> RolePermissions { get; set; }
     }
 }

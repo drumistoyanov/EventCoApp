@@ -1,0 +1,31 @@
+﻿@page
+@model EventCoApp.WebApp.Models.ProfilePictureModel
+@{
+    ViewData["Title"] = "Personal Data";
+    ViewData["ActivePage"] = ManageNavPages.ProfilePicture;
+}
+
+<h4>@ViewData["Title"]</h4>
+
+<div class="row">
+    <form enctype="multipart/form-data" method="post">
+        <div class="col-md-6">
+            <p>Upload new picture</p>
+            @Html.Label("Profile picture")
+            <input asp-for="PhotoFile" type="file" />
+            @Html.ValidationMessageFor(m => m.PhotoString, null, new { @class = "text-danger" })
+
+            <p>
+                <div class="row">
+                    <div class="col text-center">
+                        <input type="submit" value="Upload picture" asp-area="" asp-controller="Account" asp-action="Upload" class="primary-btn text-uppercase" />
+                    </div>
+                </div>
+            </p>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

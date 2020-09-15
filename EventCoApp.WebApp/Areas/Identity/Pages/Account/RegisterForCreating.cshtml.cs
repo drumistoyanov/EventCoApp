@@ -1,3 +1,12 @@
+using EventCoApp.DataAccessLibrary.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -5,18 +14,6 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using EventCoApp.DataAccessLibrary.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
-using EventCoApp.DataAccessLibrary.DataAccess;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using EventCoApp.Services.Messaging;
-using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace EventCoApp.WebApp.Areas.Identity.Pages.Account
 {
@@ -93,18 +90,18 @@ namespace EventCoApp.WebApp.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new User { FirstName = Input.FirstName, LastName = Input.LastName, UserName = Input.Username, Email = Input.Email, DateOfRegistration = DateTime.Now };
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                User user = new User { FirstName = Input.FirstName, LastName = Input.LastName, UserName = Input.Username, Email = Input.Email, DateOfRegistration = DateTime.Now };
+                IdentityResult result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    var addToRole = await _userManager.AddToRoleAsync(user,"Creator");
+                    IdentityResult addToRole = await _userManager.AddToRoleAsync(user, "Creator");
                     if (addToRole.Succeeded)
                     {
                         _logger.LogInformation("User created a new account with password.");
 
-                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        string code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                        var callbackUrl = Url.Page(
+                        string callbackUrl = Url.Page(
                             "/Account/ConfirmEmail",
                             pageHandler: null,
                             values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
@@ -124,7 +121,7 @@ namespace EventCoApp.WebApp.Areas.Identity.Pages.Account
                         }
                     }
                 }
-                foreach (var error in result.Errors)
+                foreach (IdentityError error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }

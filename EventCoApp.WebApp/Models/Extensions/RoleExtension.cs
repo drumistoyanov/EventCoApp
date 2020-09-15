@@ -1,8 +1,5 @@
 ﻿using EventCoApp.DataAccessLibrary.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EventCoApp.WebApp.Models.Extensions
 {
@@ -10,17 +7,19 @@ namespace EventCoApp.WebApp.Models.Extensions
     {
         public static Role ToEntity(this RoleViewModel source)
         {
-            var destination = new Role();
-
-            destination.Name = source.Name;
+            Role destination = new Role
+            {
+                Name = source.Name
+            };
 
             if (source.PermissionIds != null)
             {
-                foreach (var permissionId in source.PermissionIds)
+                foreach (int permissionId in source.PermissionIds)
                 {
-                    var rolePermission = new RolePermission();
-
-                    rolePermission.PermissionId = permissionId;
+                    RolePermission rolePermission = new RolePermission
+                    {
+                        PermissionId = permissionId
+                    };
 
                     destination.RolePermissions.Add(rolePermission);
                 }
@@ -31,15 +30,16 @@ namespace EventCoApp.WebApp.Models.Extensions
 
         public static RoleViewModel ToViewModel(this Role source)
         {
-            var destination = new RoleViewModel();
-
-            destination.Id = source.Id;
-            destination.Name = source.Name;
-            destination.ConcurrencyStamp = source.ConcurrencyStamp;
+            RoleViewModel destination = new RoleViewModel
+            {
+                Id = source.Id,
+                Name = source.Name,
+                ConcurrencyStamp = source.ConcurrencyStamp
+            };
 
             if (source.RolePermissions != null)
             {
-                foreach (var rolePermission in source.RolePermissions)
+                foreach (RolePermission rolePermission in source.RolePermissions)
                 {
                     destination.PermissionIds.Add(rolePermission.PermissionId);
                 }
@@ -50,11 +50,11 @@ namespace EventCoApp.WebApp.Models.Extensions
 
         public static List<RoleViewModel> ToListViewModel(this List<Role> source)
         {
-            var destination = new List<RoleViewModel>();
+            List<RoleViewModel> destination = new List<RoleViewModel>();
 
             if (source != null)
             {
-                foreach (var item in source)
+                foreach (Role item in source)
                 {
                     destination.Add(item.ToViewModel());
                 }
@@ -69,14 +69,14 @@ namespace EventCoApp.WebApp.Models.Extensions
             destination.Name = source.Name;
             destination.ConcurrencyStamp = source.ConcurrencyStamp;
 
-            var oldPermissions = new List<RolePermission>();
+            List<RolePermission> oldPermissions = new List<RolePermission>();
 
-            foreach (var rolePermission in destination.RolePermissions)
+            foreach (RolePermission rolePermission in destination.RolePermissions)
             {
                 oldPermissions.Add(rolePermission);
             }
 
-            foreach (var oldPermission in oldPermissions)
+            foreach (RolePermission oldPermission in oldPermissions)
             {
                 if (!source.PermissionIds.Contains(oldPermission.PermissionId))
                 {
@@ -90,11 +90,12 @@ namespace EventCoApp.WebApp.Models.Extensions
 
             if (source.PermissionIds != null)
             {
-                foreach (var permissionId in source.PermissionIds)
+                foreach (int permissionId in source.PermissionIds)
                 {
-                    var rolePermission = new RolePermission();
-
-                    rolePermission.PermissionId = permissionId;
+                    RolePermission rolePermission = new RolePermission
+                    {
+                        PermissionId = permissionId
+                    };
 
                     destination.RolePermissions.Add(rolePermission);
                 }

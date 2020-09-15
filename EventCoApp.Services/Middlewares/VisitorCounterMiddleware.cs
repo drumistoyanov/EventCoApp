@@ -46,7 +46,7 @@ namespace EventCoApp.Services.Middlewares
                 context.Response.Cookies.Append("VisitorId", Guid.NewGuid().ToString(), new CookieOptions()
                 {
                     Path = "/",
-                    HttpOnly = true,
+                    HttpOnly = false,
                     Secure = false,
                 });
             }

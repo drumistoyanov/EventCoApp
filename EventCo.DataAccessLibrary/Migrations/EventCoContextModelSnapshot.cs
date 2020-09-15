@@ -38,12 +38,6 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ModifiedById")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("TicketCount")
                         .HasColumnType("int");
 
@@ -55,8 +49,6 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                     b.HasIndex("CreatedById");
 
                     b.HasIndex("EventId");
-
-                    b.HasIndex("ModifiedById");
 
                     b.ToTable("Bookings");
                 });
@@ -165,12 +157,6 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ModifiedById")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("NewsID")
                         .HasColumnType("int");
 
@@ -179,8 +165,6 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                     b.HasIndex("CreatedById");
 
                     b.HasIndex("EventId");
-
-                    b.HasIndex("ModifiedById");
 
                     b.HasIndex("NewsID");
 
@@ -230,12 +214,6 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ModifiedById")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("SiteCounter")
                         .HasColumnType("int");
 
@@ -248,8 +226,6 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("CreatedById");
-
-                    b.HasIndex("ModifiedById");
 
                     b.ToTable("Logs");
                 });
@@ -276,19 +252,11 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ModifiedById")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("ID");
 
                     b.HasIndex("CreatedById");
 
                     b.HasIndex("EventId");
-
-                    b.HasIndex("ModifiedById");
 
                     b.ToTable("Messages");
                 });
@@ -299,6 +267,12 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Approved")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Counter")
+                        .HasColumnType("int");
 
                     b.Property<int?>("CreatedById")
                         .HasColumnType("int");
@@ -313,17 +287,12 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ModifiedById")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
                     b.HasIndex("CreatedById");
-
-                    b.HasIndex("ModifiedById");
 
                     b.ToTable("News");
                 });
@@ -421,12 +390,6 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ModifiedById")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -435,8 +398,6 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                     b.HasIndex("CreatedById");
 
                     b.HasIndex("EventId");
-
-                    b.HasIndex("ModifiedById");
 
                     b.ToTable("Tickets");
                 });
@@ -501,6 +462,9 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -562,7 +526,7 @@ namespace EventCoApp.DataAccessLibrary.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RoleClaims");
+                    b.ToTable("AspNetRoleClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
@@ -585,33 +549,7 @@ namespace EventCoApp.DataAccessLibrary.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserClaims");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("IdentityUserClaim<string>");
+                    b.ToTable("AspNetUserClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
@@ -692,10 +630,6 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("EventCoApp.DataAccessLibrary.Models.User", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById");
                 });
 
             modelBuilder.Entity("EventCoApp.DataAccessLibrary.Models.Event", b =>
@@ -733,10 +667,6 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("EventCoApp.DataAccessLibrary.Models.User", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById");
-
                     b.HasOne("EventCoApp.DataAccessLibrary.Models.News", null)
                         .WithMany("Images")
                         .HasForeignKey("NewsID");
@@ -747,10 +677,6 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                     b.HasOne("EventCoApp.DataAccessLibrary.Models.User", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById");
-
-                    b.HasOne("EventCoApp.DataAccessLibrary.Models.User", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById");
                 });
 
             modelBuilder.Entity("EventCoApp.DataAccessLibrary.Models.Message", b =>
@@ -764,21 +690,13 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("EventCoApp.DataAccessLibrary.Models.User", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById");
                 });
 
             modelBuilder.Entity("EventCoApp.DataAccessLibrary.Models.News", b =>
                 {
                     b.HasOne("EventCoApp.DataAccessLibrary.Models.User", "CreatedBy")
-                        .WithMany()
+                        .WithMany("News")
                         .HasForeignKey("CreatedById");
-
-                    b.HasOne("EventCoApp.DataAccessLibrary.Models.User", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById");
                 });
 
             modelBuilder.Entity("EventCoApp.DataAccessLibrary.Models.RolePermission", b =>
@@ -807,10 +725,6 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("EventCoApp.DataAccessLibrary.Models.User", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById");
                 });
 
             modelBuilder.Entity("EventCoApp.DataAccessLibrary.Models.UserPermission", b =>
@@ -844,13 +758,6 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.HasOne("EventCoApp.DataAccessLibrary.Models.User", null)
-                        .WithMany("Claims")
-                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>

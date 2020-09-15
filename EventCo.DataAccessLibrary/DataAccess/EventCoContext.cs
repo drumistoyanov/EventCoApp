@@ -43,10 +43,6 @@ namespace EventCoApp.DataAccessLibrary.DataAccess
             {
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
-            builder.Entity<IdentityRoleClaim<int>>(entity =>
-            {
-                entity.ToTable("RoleClaims");
-            });
             builder.Entity<Booking>(entity =>
             {
                 entity.HasOne<User>(d => d.CreatedBy).WithMany(p => p.Bookings).HasForeignKey(d => d.CreatedById);
@@ -88,11 +84,9 @@ namespace EventCoApp.DataAccessLibrary.DataAccess
 
                 entity.HasMany(e => e.Messages).WithOne(e => e.CreatedBy).HasForeignKey(e => e.CreatedById);
 
+                entity.HasMany(d => d.News).WithOne(p => p.CreatedBy).HasForeignKey(d => d.CreatedById);
+
                 entity.ToTable("Users");
-            });
-            builder.Entity<IdentityUserClaim<int>>(entity =>
-            {
-                entity.ToTable("UserClaims");
             });
             builder.Entity<IdentityUserLogin<int>>(entity =>
             {
@@ -186,35 +180,12 @@ namespace EventCoApp.DataAccessLibrary.DataAccess
                 entity.HasOne(d => d.User).WithMany(p => p.UserPermissions).HasForeignKey(d => d.UserId);
                 entity.ToTable("UserPermissions");
             });
+
+            builder.Entity<News>(entity =>
+            {
+                entity.HasOne(d => d.CreatedBy).WithMany(p => p.News).HasForeignKey(d => d.CreatedById);
+                entity.ToTable("News");
+            });
         }
-
-        //private static void ConfigureUserIdentityRelations(ModelBuilder builder)
-        //{
-
-        //    builder.Entity<User>()
-        //        .HasMany(e => e.Claims)
-        //        .WithOne()
-        //        .HasForeignKey(e => e.UserId)
-        //        .IsRequired()
-        //        .OnDelete(DeleteBehavior.Restrict);
-
-        //    builder.Entity<User>()
-        //        .HasMany(e => e.Logins)
-        //        .WithOne()
-        //        .HasForeignKey(e => e.UserId)
-        //        .IsRequired()
-        //        .OnDelete(DeleteBehavior.Restrict);
-
-        //    builder.Entity<User>()
-        //        .HasMany(e => e.Roles)
-        //        .WithOne()
-        //        .HasForeignKey(e => e.UserId)
-        //        .IsRequired()
-        //        .OnDelete(DeleteBehavior.Restrict);
-        //    builder.Entity<Event>()
-        //        .HasOne(e => e.CreatedBy);
-        //    builder.Entity<Event>()
-        //        .HasOne(e => e.ModifiedBy);
-        //}
     }
 }

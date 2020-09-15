@@ -4,8 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EventCoApp.DataAccessLibrary.Models
 {
-    public class Ticket : BaseEntity
+    public class Ticket 
     {
+        public int ID { get; set; }
         [Required]
         [Range(typeof(decimal), "0.0", "79228162514264337593543950335")]
         [Column(TypeName = "decimal(18,2)")]

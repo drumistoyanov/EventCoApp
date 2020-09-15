@@ -1,12 +1,9 @@
-﻿using EventCoApp.Common.Enums;
-using EventCoApp.DataAccessLibrary.Models;
+﻿using EventCoApp.DataAccessLibrary.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 namespace EventCoApp.WebApp.Models
 {
     public class EventViewModel
@@ -38,7 +35,7 @@ namespace EventCoApp.WebApp.Models
         [Display(Name = "Created By")]
         public string UserName { get; set; }
         public int CreatedById { get; set; }
-        [Display(Name="Seen")]
+        [Display(Name = "Seen")]
         public int Counter { get; set; }
         [Required]
         [Display(Name = "Type")]

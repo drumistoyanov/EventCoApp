@@ -1,4 +1,4 @@
-﻿using SwiftCourier.Models;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using EventCoApp.DataAccessLibrary.Models;
 using EventCoApp.WebApp.Models;
 
-namespace SwiftCourier.Models.Extensions
+namespace EventCoApp.Models.Extensions
 {
     public static partial class Extensions
     {

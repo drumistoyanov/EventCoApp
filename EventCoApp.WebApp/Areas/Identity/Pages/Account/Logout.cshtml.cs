@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using EventCoApp.WebApp.Controllers;
 
 namespace EventCoApp.WebApp.Areas.Identity.Pages.Account
 {
@@ -37,7 +38,7 @@ namespace EventCoApp.WebApp.Areas.Identity.Pages.Account
             }
             else
             {
-                return RedirectToPage();
+                return RedirectToAction(nameof(HomeController.IndexAsync), "Home");
             }
         }
     }

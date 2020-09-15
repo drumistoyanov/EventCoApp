@@ -32,6 +32,13 @@ namespace EventCoApp.DataAccessLibrary.Models
         [Range(typeof(decimal), "0.0", "79228162514264337593543950335")]
         [Column(TypeName = "decimal(18,2)")]
         public decimal TicketPrice { get; set; } = 0;
+#nullable disable
+        public DateTime? ModifiedOn { get; set; }
+#nullable enable
+        public User? ModifiedBy { get; set; }
+        [ForeignKey("ModifiedById")]
+        public int? ModifiedById { get; set; }
+#nullable disable
         public int Counter { get; set; } = 0;
         public bool VisibleChat { get; set; } = true;
         public virtual ICollection<Image> Images { get; set; }

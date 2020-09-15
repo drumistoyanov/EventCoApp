@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EventCoApp.DataAccessLibrary.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace EventCoApp.WebApp.Models
         public int EventId { get; set; }
 
         [Display(Name = "Created By")]
-        public string CreatedBy { get; set; }
+        public User CreatedBy { get; set; }
         public int CreatedById { get; set; }
         public DateTime When { get; set; }
     }

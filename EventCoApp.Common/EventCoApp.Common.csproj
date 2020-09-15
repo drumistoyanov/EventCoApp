@@ -6,8 +6,11 @@
 
   <ItemGroup>
     <Compile Remove="BindingModels\**" />
+    <Compile Remove="ViewModels\**" />
     <EmbeddedResource Remove="BindingModels\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
     <None Remove="BindingModels\**" />
+    <None Remove="ViewModels\**" />
   </ItemGroup>
 
   <ItemGroup>

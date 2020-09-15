@@ -1,5 +1,4 @@
 ﻿using EventCoApp.DataAccessLibrary.Models;
-using SwiftCourier.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +17,7 @@ namespace EventCoApp.WebApp.Models.Extensions
                 RequestDate = source.CreatedOn,
                 EventId = source.EventId,
                 TicketCount = source.TicketCount,
-                WholePrice = source.TicketCount * source.Event.TicketPrice
+                WholePrice = source.WholePrice  
             };
 
 
@@ -34,7 +33,7 @@ namespace EventCoApp.WebApp.Models.Extensions
                 RequestDate = source.CreatedOn,
                 EventId = source.EventId,
                 TicketCount = source.TicketCount,
-                WholePrice = source.TicketCount * source.Event.TicketPrice,
+                WholePrice = source.WholePrice,
                 TicketPrice=source.Event.TicketPrice
             };
 
@@ -65,7 +64,7 @@ namespace EventCoApp.WebApp.Models.Extensions
                 Event = source.Event.ToDetailsViewModel(),
                 TicketPrice=source.Event.TicketPrice,
                 TicketCount = source.TicketCount,
-                WholePrice = source.TicketCount * source.Event.TicketPrice
+                WholePrice = source.WholePrice
             };
 
 
@@ -79,7 +78,7 @@ namespace EventCoApp.WebApp.Models.Extensions
                 CreatedOn = source.RequestDate,
                 EventId = source.EventId,
                 TicketCount = source.TicketCount,
-                WholePrice = source.TicketCount * source.Event.TicketPrice
+                WholePrice = source.TicketCount * source.TicketPrice
             };
 
             return destination;
@@ -90,7 +89,7 @@ namespace EventCoApp.WebApp.Models.Extensions
             destination.CreatedOn = source.RequestDate;
             destination.EventId = source.EventId;
             destination.TicketCount = source.TicketCount;
-            destination.WholePrice = source.TicketCount * source.Event.TicketPrice;
+            destination.WholePrice = source.TicketCount * source.TicketPrice;
 
             return destination;
         }

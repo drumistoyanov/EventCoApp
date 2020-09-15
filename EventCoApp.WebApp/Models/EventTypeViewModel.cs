@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace EventCoApp.WebApp.Models
 {
     public class EventTypeViewModel
     {
-        [Display(Name= "Event Type")]
+        [Display(Name = "Event Type")]
         public int Id { get; set; }
 
         [Display(Name = "Event Type")]
