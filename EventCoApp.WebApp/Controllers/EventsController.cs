@@ -161,6 +161,7 @@ namespace EventCoApp.WebApp.Controllers
             return View(new EventViewModel { Locations = GetLocationsList(), EventTypes = GetEventTypesList(), When = DateTime.Now });
         }
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(EventViewModel model)
         {
@@ -178,13 +179,13 @@ namespace EventCoApp.WebApp.Controllers
 
                 if (model.ImagesFiles != null || model.ImagesFiles.Count != 0)
                 {
-                    model.Images = new List<Image>();
+                    model.Images = new List<EventImage>();
                     foreach (var formFile in model.ImagesFiles)
                     {
                         if (formFile.Length > 0)
                         {
                             var file = UploadedFile(formFile);
-                            var image = new ImageViewModel()
+                            var image = new EventImageViewModel()
                             {
                                 CreatedById = userId,
                                 ImageData = file,

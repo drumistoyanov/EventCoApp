@@ -11,14 +11,15 @@ namespace EventCoApp.WebApp.Models.Extensions
     {
         public static EventViewModel ToViewModel(this Event source)
         {
-            var destination = new EventViewModel();
-
-            destination.Id = source.ID;
-            destination.Name = source.Name;
-            destination.Description = source.Description;
-            destination.LocationId = source.LocationId;
-            destination.When = source.When;
-            destination.CreatedById = source.CreatedById.Value;
+            var destination = new EventViewModel
+            {
+                Id = source.ID,
+                Name = source.Name,
+                Description = source.Description,
+                LocationId = source.LocationId,
+                When = source.When,
+                CreatedById = source.CreatedById.Value
+            };
 
 
             if (source.EventType != null)
@@ -31,16 +32,17 @@ namespace EventCoApp.WebApp.Models.Extensions
 
         public static EventDetailsViewModel ToDetailsViewModel(this Event source)
         {
-            var destination = new EventDetailsViewModel();
-
-            destination.Id = source.ID;
-            destination.Name = source.Name;
-            destination.Description = source.Description;
-            destination.Location = source.Location.Name;
-            destination.When = source.When;
-            destination.UserName = source.CreatedBy.UserName;
-            destination.Counter = source.Counter;
-            destination.VisibleChat = source.VisibleChat;
+            var destination = new EventDetailsViewModel
+            {
+                Id = source.ID,
+                Name = source.Name,
+                Description = source.Description,
+                Location = source.Location.Name,
+                When = source.When,
+                UserName = source.CreatedBy.UserName,
+                Counter = source.Counter,
+                VisibleChat = source.VisibleChat
+            };
 
             if (source.Messages != null)
             {
@@ -57,7 +59,7 @@ namespace EventCoApp.WebApp.Models.Extensions
             }
             if (source.Images != null)
             {
-                destination.Images = new List<ImageListItemViewModel>();
+                destination.Images = new List<EventImageListItemViewModel>();
                 foreach (var item in source.Images)
                 {
                     destination.Images.Add(item.ToListItemViewModel());
@@ -69,18 +71,19 @@ namespace EventCoApp.WebApp.Models.Extensions
 
         public static Event ToEntity(this EventViewModel source)
         {
-            var destination = new Event();
+            var destination = new Event
+            {
+                ID = source.Id,
+                Name = source.Name,
+                Description = source.Description,
+                LocationId = source.LocationId,
+                When = source.When,
+                CreatedById = source.CreatedById,
+                TicketCount = source.TicketCount,
+                TicketPrice = source.TicketPrice,
 
-            destination.ID = source.Id;
-            destination.Name = source.Name;
-            destination.Description = source.Description;
-            destination.LocationId = source.LocationId;
-            destination.When = source.When;
-            destination.CreatedById = source.CreatedById;
-            destination.TicketCount = source.TicketCount;
-            destination.TicketPrice = source.TicketPrice;
-
-            destination.CreatedOn = DateTime.Now;
+                CreatedOn = DateTime.Now
+            };
             if (source.Images!=null)
             {
 
@@ -129,35 +132,36 @@ namespace EventCoApp.WebApp.Models.Extensions
 
         public static EventListItemViewModel ToListItemViewModel(this Event source)
         {
-            var @event = new EventListItemViewModel();
+            var destination = new EventListItemViewModel
+            {
+                Id = source.ID,
+                Name = source.Name,
+                UserName = source.CreatedBy != null ? source.CreatedBy.UserName : "Customer",
+                Description = source.Description,
+                Location = source.Location.Name,
+                When = source.When,
+                TicketCount = source.TicketCount,
+                TicketPrice = source.TicketPrice,
+                Counter = source.Counter
+            };
 
-            @event.Id = source.ID;
-            @event.Name = source.Name;
-            @event.UserName = source.CreatedBy != null ? source.CreatedBy.UserName : "Customer";
-            @event.Description = source.Description;
-            @event.Location = source.Location.Name;
-            @event.When = source.When;
-            @event.TicketCount = source.TicketCount;
-            @event.TicketPrice = source.TicketPrice;
-            @event.Counter = source.Counter;
-            
 
             if (source.EventType != null)
             {
-                @event.EventType = source.EventType.ToListItemViewModel();
+                destination.EventType = source.EventType.ToListItemViewModel();
             }
             if (source.Images!=null)
             {
-                @event.Images = new List<ImageListItemViewModel>();
+                destination.Images = new List<EventImageListItemViewModel>();
                 foreach (var item in source.Images)
                 {
-                    @event.Images.Add(item.ToListItemViewModel());
+                    destination.Images.Add(item.ToListItemViewModel());
                 }
 
             }
 
 
-            return @event;
+            return destination;
         }
     }
 }

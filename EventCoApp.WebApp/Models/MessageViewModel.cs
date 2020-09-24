@@ -13,6 +13,7 @@ namespace EventCoApp.WebApp.Models
         public int EventId { get; set; }
         public string CreatedBy { get; set; }
         public int CreatedById { get; set; }
+        public string Photo { get; set; }
     }
 
     public class MessageListViewModel

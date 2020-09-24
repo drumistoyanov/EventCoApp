@@ -23,7 +23,6 @@
   <ItemGroup>
     <Compile Remove="Areas\Identity\Pages\Account\Manage\DeletePersonalData.cshtml.cs" />
     <Compile Remove="Areas\Identity\Pages\Account\Manage\DownloadPersonalData.cshtml.cs" />
-    <Compile Remove="Controllers\NewsController.cs" />
     <Compile Remove="Controllers\UsersController.cs" />
     <Compile Remove="Helpers\RoleHelper.cs" />
     <Compile Remove="Models\Extensions\UserExtension.cs" />

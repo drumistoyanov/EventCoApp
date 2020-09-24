@@ -14,6 +14,7 @@ using EventCoApp.DataAccessLibrary.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using EventCoApp.Common.Enums;
+using EventCoApp.WebApp.Models.Extensions;
 
 namespace EventCoApp.WebApp.Controllers
 {
@@ -52,36 +53,23 @@ namespace EventCoApp.WebApp.Controllers
         public async Task<IActionResult> IndexAsync()
         {
             _logger.LogInformation("Log message in the Index() method");
-            //var listNews = new List<NewsViewModel>();
-            //var newsApiClient = new NewsApiClient("1a8cf277ffe84b368b0b8dc0f011e804");
-            //var articlesResponse = newsApiClient.GetEverything(new EverythingRequest
-            //{
-            //    Q = "Culture",
-            //    SortBy = SortBys.Popularity,
-            //    Language = Languages.EN,
-            //    From = DateTime.Now.Date
-            //});
-            //if (articlesResponse.Status == Statuses.Ok)
-            //{
+            var listNews = new List<NewsListItemViewModel>();
+            var news = _context.News
+                .Include(n => n.CreatedBy)
+                .Include(n=>n.Images)
+                .Where(n => n.Approved == true);
+            if (news.Count()>0)
+            {
+                var log = await _context.Logs.FirstOrDefaultAsync(l => l.Type == LogType.SiteCounter);
+                return View(new SearchEventsModel { Locations = GetLocationsList(), EventTypes = GetEventTypesList(), From = DateTime.Now, To = DateTime.Now, SiteVisitors = log.SiteCounter, News = news.ToList().ToListViewModel() });
+            }
+            else
+            {
+                var log = await _context.Logs.FirstOrDefaultAsync(l => l.Type == LogType.SiteCounter);
 
-            //    // here's the first 20
-            //    foreach (var article in articlesResponse.Articles)
-            //    {
-            //        var newArticle = new NewsViewModel()
-            //        {
-            //            Author = article.Author,
-            //            PublishedAt = article.PublishedAt,
-            //            Description = article.Description,
-            //            Title = article.Title,
-            //            Url = article.Url,
-            //            UrlToImg = article.UrlToImage,
+                return View(new SearchEventsModel { Locations = GetLocationsList(), EventTypes = GetEventTypesList(), From = DateTime.Now, To = DateTime.Now, SiteVisitors = log.SiteCounter });
 
-            //        };
-            //        listNews.Add(newArticle);
-            //    }
-            //}
-            var log = await _context.Logs.FirstOrDefaultAsync(l => l.Type == LogType.SiteCounter);
-            return View(new SearchEventsModel { Locations = GetLocationsList(), EventTypes = GetEventTypesList(), From = DateTime.Now, To = DateTime.Now, SiteVisitors = log.SiteCounter });
+            }
         }
 
         public IActionResult Privacy()

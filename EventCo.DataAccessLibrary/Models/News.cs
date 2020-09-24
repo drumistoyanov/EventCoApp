@@ -1,4 +1,5 @@
 ﻿using EventCoApp.DataAccessLibrary.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,14 +10,16 @@ namespace EventCoApp.DataAccessLibrary.Models
     {
         public News()
         {
-            Images = new HashSet<Image>();
+            Images = new HashSet<NewsImage>();
         }
         [Required]
         [Column(TypeName = "nvarchar(1000)")]
         public string Description { get; set; }
-        public virtual ICollection<Image> Images { get; set; }
+        public virtual ICollection<NewsImage> Images { get; set; }
         public bool Approved { get; set; } = false;
         public int Counter { get; set; } = 0;
         public string Name { get; set; }
+        public DateTime? ModifiedOn { get; set; }
+        public int ModifiedById { get; set; }
     }
 }

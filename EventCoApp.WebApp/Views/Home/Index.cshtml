@@ -71,7 +71,50 @@
             </div>
         </div>
         <div class="row">
-            
+            <div class="row">
+                @if (Model.News!=null)
+                @foreach (var item in Model.News)
+                {
+                    <div class="col-lg-4">
+                        <div class="single-destinations">
+                            <div class="thumb">
+                                @if (@item.Images != null && @item.Images.Count != 0)
+                                {
+                                    <img src='~/images/@item.Images.FirstOrDefault().ImageData' height="300" alt="">}
+                            </div>
+                            <div class="details">
+                                <h4 class="d-flex justify-content-between">
+                                    <span>@item.Name</span>
+                                    @*<div class="star">
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star"></span>
+                                        </div>*@
+                                </h4>
+                                @*<p>
+                                        View on map   |   49 Reviews
+                                    </p>*@
+                                <ul class="package-list">
+                                    <li class="d-flex justify-content-between align-items-center">
+                                        <span>Created</span>
+                                        <span>@item.CreatedOn</span>
+                                    </li>
+
+                                    <li class="d-flex justify-content-between align-items-center">
+                                        <span>Creator</span>
+                                        <span>@item.CreatedBy</span>
+                                    </li>
+                                    <li class="d-flex justify-content-between align-items-center">
+                                        <span>Description</span>
+                                        <span>@item.Description</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>}
+            </div>
         </div>
     </div>
 </section>
@@ -81,23 +124,3 @@
         <span>Site visitors @Model.SiteVisitors</span>
     </div>
 </div>
-@*<section class="destinations-area">
-        <div class="container">
-            <div class="row d-flex justify-content-center">
-                <div class="menu-content pb-40 col-lg-8">
-                    <div class="title text-center">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                </div>
-                <div class="col">
-
-                </div>
-                <div class="col">
-                </div>
-
-            </div>
-        </div>
-    </section>*@

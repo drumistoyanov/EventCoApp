@@ -26,7 +26,7 @@ namespace EventCoApp.WebApp.Models
         [Display(Name = "When Is")]
         public DateTime When { get; set; }
         [Display(Name = "Images")]
-        public List<Image> Images { get; set; }
+        public List<EventImage> Images { get; set; }
         public List<IFormFile> ImagesFiles { get; set; }
         [Display(Name = "Ticket Price")]
         public decimal TicketPrice { get; set; }
@@ -60,7 +60,7 @@ namespace EventCoApp.WebApp.Models
 
         [Display(Name = "When Is")]
         public DateTime When { get; set; }
-        public List<ImageListItemViewModel> Images { get; set; }
+        public List<EventImageListItemViewModel> Images { get; set; }
         [Display(Name = "Ticket Price")]
         public decimal TicketPrice { get; set; }
         [Display(Name = "Ticket Count")]
@@ -93,7 +93,7 @@ namespace EventCoApp.WebApp.Models
 
         [Display(Name = "When Is")]
         public DateTime When { get; set; }
-        public List<ImageListItemViewModel> Images { get; set; }
+        public List<EventImageListItemViewModel> Images { get; set; }
         public List<IFormFile> ImagesFiles { get; set; }
         [Display(Name = "Ticket Price")]
         public decimal TicketPrice { get; set; }

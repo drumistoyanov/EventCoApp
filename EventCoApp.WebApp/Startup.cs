@@ -42,11 +42,6 @@ namespace EventCoApp.WebApp
             services.AddDbContext<EventCoContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
-            //services.AddIdentity<User, Role>()
-            //    .AddDefaultUI()
-            //    .AddRoleManager<RoleManager<Role>>()
-            //    .AddDefaultTokenProviders()
-            //    .AddEntityFrameworkStores<EventCoContext>();
 
             services.AddIdentity<User, Role>(options =>
             {
@@ -71,7 +66,6 @@ namespace EventCoApp.WebApp
             {
                 opt.Cookie.IsEssential = true;
             });
-            services.AddAutoMapper(System.Reflection.Assembly.GetExecutingAssembly());
             services.AddControllersWithViews();
             IMvcBuilder builder = services.AddRazorPages();
 #if DEBUG
@@ -93,10 +87,8 @@ namespace EventCoApp.WebApp
 
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromSeconds(500000);
+                options.IdleTimeout = TimeSpan.FromSeconds(5000);
             });
-
-            services.AddCloudscribePagination();
 
             services.AddMvc();
 
@@ -113,13 +105,13 @@ namespace EventCoApp.WebApp
         Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
             services.AddMvc();
 
-            //google analytics
+            //Google Analytics
             services.Configure<GoogleAnalyticsOptions>(options => Configuration.GetSection("GoogleAnalytics").Bind(options));
 
             // Register the TagHelperComponent
             services.AddTransient<ITagHelperComponent, GoogleAnalyticsTagHelperComponent>();
 
-            //signalR
+            //SignalR
             services.AddSignalR(options =>
             {
                 options.EnableDetailedErrors = true;
@@ -141,9 +133,6 @@ namespace EventCoApp.WebApp
                 app.UseHsts();
             }
             loggerFactory.AddFile("Logs/log_{Date}.txt");
-
-            //UncommentForCreatingRoles
-            //roleManager.EnsureRolesCreated().Wait();
 
             app.UseMiddleware(typeof(VisitorCounterMiddleware));
 

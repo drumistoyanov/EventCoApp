@@ -1,5 +1,6 @@
 ﻿@model EventDetailsViewModel;
 @inject SignInManager<EventCoApp.DataAccessLibrary.Models.User> SignInManager
+@inject UserManager<EventCoApp.DataAccessLibrary.Models.User> UserManager
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -73,6 +74,15 @@
         @if (SignInManager.IsSignedIn(User))
         {
             @Html.Hidden("hiddenEventId", @Model.Id)
+            if (UserManager.FindByNameAsync(User.Identity.Name).Result.ProfilePicture != null)
+            {
+
+                @Html.Hidden("hiddenUserPhotoName", UserManager.FindByNameAsync(User.Identity.Name).Result.ProfilePicture)
+            }
+            else
+            {
+                @Html.Hidden("hiddenUserPhotoName", "profilePicture.png")
+            }
 
             @if (Model.VisibleChat == true)
             {
@@ -114,7 +124,7 @@
                                         {
                                             <div class="d-flex justify-content-start mb-4">
                                                 <div class="img_cont_msg">
-                                                    <img src="~/images/@Model.Messages[i].CreatedBy.ProfilePicture"  width="50" height="50" alt="~/img/profilePicture.png">
+                                                    <img src="~/images/@Model.Messages[i].CreatedBy.ProfilePicture" width="50" height="50" alt="~/img/profilePicture.png">
 
                                                 </div>
                                                 <div class="msg_cotainer">
@@ -134,7 +144,7 @@
                                                     <span class="msg_time_send">@Model.Messages[i].When</span>
 
                                                 </div><div class="img_cont_msg">
-                                                    <img src="~/images/@Model.Messages[i].CreatedBy.ProfilePicture"  width="50" height="50" alt="~/img/profilePicture.png">
+                                                    <img src="~/images/@Model.Messages[i].CreatedBy.ProfilePicture" width="50" height="50" alt="~/img/profilePicture.png">
 
                                                 </div>
                                             </div>
@@ -150,84 +160,107 @@
 
                                                 </div>
                                                 <div class="img_cont_msg">
-                                                    <img src="~/images/@Model.Messages[i].CreatedBy.ProfilePicture"  width="50" height="50" alt="~/img/profilePicture.png">
+                                                    <img src="~/images/@Model.Messages[i].CreatedBy.ProfilePicture" width="50" height="50" alt="~/img/profilePicture.png">
                                                 </div>
                                             </div>
                                             lastSide = 1;
                                         }
                                     }
-
-                                    @if (Model.Messages[Model.Messages.Count - 1].CreatedById != Model.Messages[Model.Messages.Count - 2].CreatedById && lastSide == 1)
+                                    @if (Model.Messages.Count > 1)
                                     {
-                                        <div class="d-flex justify-content-start mb-4">
-                                            <div class="img_cont_msg">
-                                                <img src="~/images/@Model.Messages[Model.Messages.Count - 1].CreatedBy.ProfilePicture"  width="50" height="50" alt="~/img/profilePicture.png">
+                                        @if (Model.Messages[Model.Messages.Count - 1].CreatedById != Model.Messages[Model.Messages.Count - 2].CreatedById && lastSide == 1)
+                                        {
+                                            <div class="d-flex justify-content-start mb-4">
+                                                <div class="img_cont_msg">
+                                                    <img src="~/images/@Model.Messages[Model.Messages.Count - 1].CreatedBy.ProfilePicture" width="50" height="50" alt="~/img/profilePicture.png">
 
-                                            </div>
-                                            <div class="msg_cotainer">
-                                                @Html.DisplayFor(x => Model.Messages[Model.Messages.Count - 1].Content)
-                                                <span class="msg_time">@Model.Messages[Model.Messages.Count - 1].When</span>
+                                                </div>
+                                                <div class="msg_cotainer">
+                                                    @Html.DisplayFor(x => Model.Messages[Model.Messages.Count - 1].Content)
+                                                    <span class="msg_time">@Model.Messages[Model.Messages.Count - 1].When</span>
 
+                                                </div>
                                             </div>
-                                        </div>
-                                        lastSide = 1;
-                                        @Html.Hidden("lastSide", lastSide)
-                                        @Html.Hidden("hiddenLastUser", Model.Messages[Model.Messages.Count - 1].CreatedBy.UserName)
-                                    }
-                                    else
+                                            lastSide = 1;
+                                            @Html.Hidden("lastSide", lastSide)
+                                            @Html.Hidden("hiddenLastUser", Model.Messages[Model.Messages.Count - 1].CreatedBy.UserName)
+                                        }
+                                        else
                                     @if (Model.Messages[Model.Messages.Count - 1].CreatedById == Model.Messages[Model.Messages.Count - 2].CreatedById && lastSide == 1)
-                                    {
-                                        <div class="d-flex justify-content-start mb-4">
-                                            <div class="img_cont_msg">
-                                                <img src="~/images/@Model.Messages[Model.Messages.Count - 1].CreatedBy.ProfilePicture"  width="50" height="50" alt="~/img/profilePicture.png">
+                                        {
+                                            <div class="d-flex justify-content-start mb-4">
+                                                <div class="img_cont_msg">
+                                                    <img src="~/images/@Model.Messages[Model.Messages.Count - 1].CreatedBy.ProfilePicture" width="50" height="50" alt="~/img/profilePicture.png">
 
-                                            </div>
-                                            <div class="msg_cotainer">
-                                                @Html.DisplayFor(x => Model.Messages[Model.Messages.Count - 1].Content)
-                                                <span class="msg_time">@Model.Messages[Model.Messages.Count - 1].When</span>
+                                                </div>
+                                                <div class="msg_cotainer">
+                                                    @Html.DisplayFor(x => Model.Messages[Model.Messages.Count - 1].Content)
+                                                    <span class="msg_time">@Model.Messages[Model.Messages.Count - 1].When</span>
 
+                                                </div>
                                             </div>
-                                        </div>
-                                        lastSide = 0;
-                                        @Html.Hidden("lastSide", lastSide)
-                                        @Html.Hidden("hiddenLastUser", Model.Messages[Model.Messages.Count - 1].CreatedBy.UserName)
-                                    }
-                                    else
+                                            lastSide = 0;
+                                            @Html.Hidden("lastSide", lastSide)
+                                            @Html.Hidden("hiddenLastUser", Model.Messages[Model.Messages.Count - 1].CreatedBy.UserName)
+                                        }
+                                        else
                                 @if (Model.Messages[Model.Messages.Count - 1].CreatedById == Model.Messages[Model.Messages.Count - 2].CreatedById && lastSide == 0)
-                                    {
-                                        <div class="d-flex justify-content-end mb-4">
-                                            <div class="msg_cotainer_send">
-                                                @Html.DisplayFor(x => Model.Messages[Model.Messages.Count - 1].Content)
-                                                <span class="msg_time_send">@Model.Messages[Model.Messages.Count - 1].When</span>
+                                        {
+                                            <div class="d-flex justify-content-end mb-4">
+                                                <div class="msg_cotainer_send">
+                                                    @Html.DisplayFor(x => Model.Messages[Model.Messages.Count - 1].Content)
+                                                    <span class="msg_time_send">@Model.Messages[Model.Messages.Count - 1].When</span>
 
-                                            </div><div class="img_cont_msg">
-                                                <img src="~/images/@Model.Messages[Model.Messages.Count - 1].CreatedBy.ProfilePicture"  width="50" height="50" alt="~/img/profilePicture.png">
+                                                </div><div class="img_cont_msg">
+                                                    <img src="~/images/@Model.Messages[Model.Messages.Count - 1].CreatedBy.ProfilePicture" width="50" height="50" alt="~/img/profilePicture.png">
 
+                                                </div>
                                             </div>
-                                        </div>
-                                        lastSide = 1;
-                                        @Html.Hidden("lastSide", lastSide)
-                                        @Html.Hidden("hiddenLastUser", Model.Messages[Model.Messages.Count - 1].CreatedBy.UserName)
-                                    }
-                                    else
+                                            lastSide = 1;
+                                            @Html.Hidden("lastSide", lastSide)
+                                            @Html.Hidden("hiddenLastUser", Model.Messages[Model.Messages.Count - 1].CreatedBy.UserName)
+                                        }
+                                        else
                                 @if (Model.Messages[Model.Messages.Count - 1].CreatedById != Model.Messages[Model.Messages.Count - 2].CreatedById && lastSide == 0)
-                                    {
-                                        <div class="d-flex justify-content-end mb-4">
-                                            <div class="msg_cotainer_send">
-                                                @Html.DisplayFor(x => Model.Messages[Model.Messages.Count - 1].Content)
-                                                <span class="msg_time_send">@Model.Messages[Model.Messages.Count - 1].When</span>
+                                        {
+                                            <div class="d-flex justify-content-end mb-4">
+                                                <div class="msg_cotainer_send">
+                                                    @Html.DisplayFor(x => Model.Messages[Model.Messages.Count - 1].Content)
+                                                    <span class="msg_time_send">@Model.Messages[Model.Messages.Count - 1].When</span>
+                                                </div>
+                                                <div class="img_cont_msg">
+                                                    <img src="~/images/@Model.Messages[Model.Messages.Count - 1].CreatedBy.ProfilePicture" width="50" height="50" alt="~/img/profilePicture.png">
+                                                </div>
                                             </div>
-                                            <div class="img_cont_msg">
-                                                <img src="~/images/@Model.Messages[Model.Messages.Count - 1].CreatedBy.ProfilePicture"  width="50" height="50" alt="~/img/profilePicture.png">
-                                            </div>
-                                        </div>
-                                        lastSide = 0;
+                                            lastSide = 0;
 
-                                        @Html.Hidden("lastSide", lastSide)
-                                        @Html.Hidden("hiddenLastUser", Model.Messages[Model.Messages.Count - 1].CreatedBy.UserName)
-                                    }
+                                            @Html.Hidden("lastSide", lastSide)
+                                            @Html.Hidden("hiddenLastUser", Model.Messages[Model.Messages.Count - 1].CreatedBy.UserName)
+                                        }
+                            }
+
+
+                            else
+                            {
+                                {
+                                    <div class="d-flex justify-content-end mb-4">
+                                        <div class="msg_cotainer_send">
+                                            @Html.DisplayFor(x => Model.Messages[Model.Messages.Count - 1].Content)
+                                            <span class="msg_time_send">@Model.Messages[Model.Messages.Count - 1].When</span>
+                                        </div>
+                                        <div class="img_cont_msg">
+                                            <img src="~/images/@Model.Messages[Model.Messages.Count - 1].CreatedBy.ProfilePicture" width="50" height="50" alt="~/img/profilePicture.png">
+                                        </div>
+                                    </div>
+                                    lastSide = 0;
+
+                                    @Html.Hidden("lastSide", lastSide)
+                                    @Html.Hidden("hiddenLastUser", Model.Messages[Model.Messages.Count - 1].CreatedBy.UserName)
+                                }
 
                             }
+
+                                }
 
 
 

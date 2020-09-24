@@ -17,13 +17,14 @@ if (document.getElementById("messages") != null) {
     var objDiv = document.getElementById("messages");
     objDiv.scrollTop = objDiv.scrollHeight;
 }
-if (document.getElementById('hiddenLastUser')!=null) {
+if (document.getElementById('hiddenLastUser') != null) {
 
     var lastUser = document.getElementById('hiddenLastUser').value;
 }
 connection.on("ReceiveMessage", function (user, message) {
-    var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    var msg = message.content;
     var lastSide = parseInt(document.getElementById('lastSide').value);
+    var photo = '/images/' + message.photo;
     lastUser = document.getElementById('hiddenLastUser').value;
     if (lastUser === user) {
         if (lastSide === 0) {
@@ -32,13 +33,17 @@ connection.on("ReceiveMessage", function (user, message) {
             div.className = 'd-flex justify-content-start mb-4';
             let insideDiv = document.createElement('div');
             insideDiv.className = 'msg_cotainer';
-            insideDiv.innerHTML = message;
+            insideDiv.innerHTML = msg;
             let span = document.createElement('span');
             span.className = 'msg_time';
             var date = new Date();
             var sender = document.createElement('div');
             sender.className = 'img_cont_msg';
-            sender.innerHTML = user;
+            var img = document.createElement("IMG");
+            img.src = photo;
+            img.width = 50;
+            img.height = 50;
+            sender.appendChild(img);
             span.innerHTML = formatDate(date);
             insideDiv.appendChild(span);
 
@@ -57,13 +62,17 @@ connection.on("ReceiveMessage", function (user, message) {
             div.className = 'd-flex justify-content-end mb-4';
             let insideDiv = document.createElement('div');
             insideDiv.className = 'msg_cotainer_send';
-            insideDiv.innerHTML = message;
+            insideDiv.innerHTML = msg;
             let span = document.createElement('span');
             span.className = 'msg_time_send';
             var date = new Date();
             var sender = document.createElement('div');
             sender.className = 'img_cont_msg';
-            sender.innerHTML = user;
+            var img = document.createElement("IMG");
+            img.src = photo;
+            img.width = 50;
+            img.height = 50;
+            sender.appendChild(img);
             span.innerHTML = formatDate(date);
             insideDiv.appendChild(span);
             div.appendChild(insideDiv);
@@ -83,13 +92,17 @@ connection.on("ReceiveMessage", function (user, message) {
             div.className = 'd-flex justify-content-end mb-4';
             let insideDiv = document.createElement('div');
             insideDiv.className = 'msg_cotainer_send';
-            insideDiv.innerHTML = message;
+            insideDiv.innerHTML = msg;
             let span = document.createElement('span');
             span.className = 'msg_time_send';
             var date = new Date();
+            var img = document.createElement("IMG");
+            img.src = photo;
+            img.width = 50;
+            img.height = 50;
             var sender = document.createElement('div');
             sender.className = 'img_cont_msg';
-            sender.innerHTML = user;
+            sender.appendChild(img);
             span.innerHTML = formatDate(date);
             insideDiv.appendChild(span);
             div.appendChild(insideDiv);
@@ -106,13 +119,17 @@ connection.on("ReceiveMessage", function (user, message) {
             div.className = 'd-flex justify-content-start mb-4';
             let insideDiv = document.createElement('div');
             insideDiv.className = 'msg_cotainer';
-            insideDiv.innerHTML = message;
+            insideDiv.innerHTML = msg;
             let span = document.createElement('span');
             span.className = 'msg_time';
             var date = new Date();
+            var img = document.createElement("IMG");
+            img.src = photo;
+            img.width = 50;
+            img.height = 50;
             var sender = document.createElement('div');
             sender.className = 'img_cont_msg';
-            sender.innerHTML = user;
+            sender.appendChild(img);
             span.innerHTML = formatDate(date);
             insideDiv.appendChild(span);
 
@@ -150,16 +167,17 @@ connection.start().then(function () {
 });
 
 class Message {
-    constructor(content, eventId, createdBy) {
+    constructor(content, eventId, createdBy, photo) {
         this.content = content;
         this.eventId = eventId;
         this.createdBy = createdBy;
+        this.photo = photo;
     }
 }
-if (document.getElementById("buttonSend")!=null) {
+if (document.getElementById("buttonSend") != null) {
 
     document.getElementById("buttonSend").addEventListener("click", function (event) {
-        let messageObj = new Message(document.getElementById("textMessage").value, document.getElementById("hiddenEventId").value, document.getElementById("hiddenName").value)
+        let messageObj = new Message(document.getElementById("textMessage").value, document.getElementById("hiddenEventId").value, document.getElementById("hiddenName").value, document.getElementById('hiddenUserPhotoName').value)
         var json = JSON.stringify(messageObj);
         var user = document.getElementById("hiddenName").value;
         var message = document.getElementById("textMessage").value;

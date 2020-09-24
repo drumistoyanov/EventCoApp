@@ -10,9 +10,10 @@ namespace EventCoApp.WebApp.Models.Extensions
     {
         public static EventType ToEntity(this EventTypeViewModel source)
         {
-            var destination = new EventType();
-
-            destination.Name = source.Name;
+            var destination = new EventType
+            {
+                Name = source.Name
+            };
 
             return destination;
         }
@@ -36,30 +37,33 @@ namespace EventCoApp.WebApp.Models.Extensions
 
         public static EventTypeViewModel ToViewModel(this EventType source)
         {
-            var destination = new EventTypeViewModel();
-
-            destination.Id = source.Id;
-            destination.Name = source.Name;
+            var destination = new EventTypeViewModel
+            {
+                Id = source.Id,
+                Name = source.Name
+            };
 
             return destination;
         }
 
         public static EventTypeDetailsViewModel ToDetailsViewModel(this EventType source)
         {
-            var destination = new EventTypeDetailsViewModel();
-
-            destination.Id = source.Id;
-            destination.Name = source.Name;
+            var destination = new EventTypeDetailsViewModel
+            {
+                Id = source.Id,
+                Name = source.Name
+            };
 
             return destination;
         }
 
         public static EventTypeListItemViewModel ToListItemViewModel(this EventType source)
         {
-            var destination = new EventTypeListItemViewModel();
-
-            destination.Id = source.Id;
-            destination.Name = source.Name;
+            var destination = new EventTypeListItemViewModel
+            {
+                Id = source.Id,
+                Name = source.Name
+            };
 
             return destination;
         }

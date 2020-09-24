@@ -10,6 +10,7 @@ using EventCoApp.DataAccessLibrary.Models;
 using EventCoApp.Models.Extensions;
 using EventCoApp.WebApp.Models;
 using EventCoApp.WebApp.Models.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,7 @@ namespace EventCoApp.WebApp.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             if (!HasPermission("VIEW_ROLES"))
@@ -42,6 +44,7 @@ namespace EventCoApp.WebApp.Controllers
             return View(await roles.Include(r => r.RolePermissions).ToListAsync());
         }
 
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (!HasPermission("VIEW_ROLES"))
@@ -67,6 +70,7 @@ namespace EventCoApp.WebApp.Controllers
             return View(role);
         }
 
+        [Authorize]
         public IActionResult Create()
         {
             if (!HasPermission("CREATE_ROLES"))
@@ -81,6 +85,7 @@ namespace EventCoApp.WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(RoleViewModel model)
         {
@@ -113,6 +118,7 @@ namespace EventCoApp.WebApp.Controllers
             return View(model);
         }
 
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (!HasPermission("EDIT_ROLES"))
@@ -142,6 +148,7 @@ namespace EventCoApp.WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(RoleViewModel model)
         {
@@ -210,6 +217,7 @@ namespace EventCoApp.WebApp.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (!HasPermission("DELETE_ROLES"))

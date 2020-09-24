@@ -10,22 +10,23 @@ namespace EventCoApp.WebApp.Models.Extensions
     {
         public static MessageViewModel ToViewModel(this Message source)
         {
-            var destination = new MessageViewModel();
-
-            destination.EventId = source.EventId;
-            destination.Content = source.Content;
-            destination.CreatedBy = source.CreatedBy.UserName;
+            var destination = new MessageViewModel
+            {
+                EventId = source.EventId,
+                Content = source.Content,
+                CreatedBy = source.CreatedBy.UserName
+            };
 
             return destination;
         }
 
         public static MessageListViewModel ToListItemViewModel(this Message source)
         {
-            var destination = new MessageListViewModel();
-
-            
-            destination.EventId = source.EventId;
-            destination.Content = source.Content;
+            var destination = new MessageListViewModel
+            {
+                EventId = source.EventId,
+                Content = source.Content
+            };
             if (source.CreatedBy.ProfilePicture==null)
             {
                 source.CreatedBy.ProfilePicture = "profilePicture.png";
@@ -39,12 +40,13 @@ namespace EventCoApp.WebApp.Models.Extensions
 
         public static Message ToEntity(this MessageViewModel source)
         {
-            var destination = new Message();
-
-            destination.EventId = source.EventId;
-            destination.Content = source.Content;
-            destination.CreatedById = source.CreatedById;
-            destination.CreatedOn = DateTime.Now;
+            var destination = new Message
+            {
+                EventId = source.EventId,
+                Content = source.Content,
+                CreatedById = source.CreatedById,
+                CreatedOn = DateTime.Now
+            };
 
             return destination;
         }

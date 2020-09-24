@@ -4,14 +4,16 @@ using EventCoApp.DataAccessLibrary.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EventCoApp.DataAccessLibrary.Migrations
 {
     [DbContext(typeof(EventCoContext))]
-    partial class EventCoContextModelSnapshot : ModelSnapshot
+    [Migration("20200915130726_news2")]
+    partial class news2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,7 +119,24 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("EventCoApp.DataAccessLibrary.Models.EventImage", b =>
+            modelBuilder.Entity("EventCoApp.DataAccessLibrary.Models.EventType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EventTypes");
+                });
+
+            modelBuilder.Entity("EventCoApp.DataAccessLibrary.Models.Image", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -140,30 +159,18 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("NewsID")
+                        .HasColumnType("int");
+
                     b.HasKey("ID");
 
                     b.HasIndex("CreatedById");
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("EventImage");
-                });
+                    b.HasIndex("NewsID");
 
-            modelBuilder.Entity("EventCoApp.DataAccessLibrary.Models.EventType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EventTypes");
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("EventCoApp.DataAccessLibrary.Models.Location", b =>
@@ -299,38 +306,6 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                     b.HasIndex("CreatedById");
 
                     b.ToTable("News");
-                });
-
-            modelBuilder.Entity("EventCoApp.DataAccessLibrary.Models.NewsImage", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("CreatedById")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ImageData")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("NewsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("NewsId");
-
-                    b.ToTable("NewsImages");
                 });
 
             modelBuilder.Entity("EventCoApp.DataAccessLibrary.Models.Permission", b =>
@@ -680,7 +655,7 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                         .HasForeignKey("ModifiedById");
                 });
 
-            modelBuilder.Entity("EventCoApp.DataAccessLibrary.Models.EventImage", b =>
+            modelBuilder.Entity("EventCoApp.DataAccessLibrary.Models.Image", b =>
                 {
                     b.HasOne("EventCoApp.DataAccessLibrary.Models.User", "CreatedBy")
                         .WithMany()
@@ -691,6 +666,10 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("EventCoApp.DataAccessLibrary.Models.News", null)
+                        .WithMany("Images")
+                        .HasForeignKey("NewsID");
                 });
 
             modelBuilder.Entity("EventCoApp.DataAccessLibrary.Models.Log", b =>
@@ -718,19 +697,6 @@ namespace EventCoApp.DataAccessLibrary.Migrations
                     b.HasOne("EventCoApp.DataAccessLibrary.Models.User", "CreatedBy")
                         .WithMany("News")
                         .HasForeignKey("CreatedById");
-                });
-
-            modelBuilder.Entity("EventCoApp.DataAccessLibrary.Models.NewsImage", b =>
-                {
-                    b.HasOne("EventCoApp.DataAccessLibrary.Models.User", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
-                    b.HasOne("EventCoApp.DataAccessLibrary.Models.News", "News")
-                        .WithMany("Images")
-                        .HasForeignKey("NewsId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("EventCoApp.DataAccessLibrary.Models.RolePermission", b =>

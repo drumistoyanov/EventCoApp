@@ -11,7 +11,7 @@ namespace EventCoApp.DataAccessLibrary.Models
     {
         public Event()
         {
-            Images = new HashSet<Image>();
+            Images = new HashSet<EventImage>();
             Tickets = new HashSet<Ticket>();
             Messages = new HashSet<Message>();
             Bookings = new HashSet<Booking>();
@@ -41,7 +41,7 @@ namespace EventCoApp.DataAccessLibrary.Models
 #nullable disable
         public int Counter { get; set; } = 0;
         public bool VisibleChat { get; set; } = true;
-        public virtual ICollection<Image> Images { get; set; }
+        public virtual ICollection<EventImage> Images { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }
         public virtual ICollection<Booking> Bookings { get; set; }
         public virtual ICollection<Message> Messages { get; set; }

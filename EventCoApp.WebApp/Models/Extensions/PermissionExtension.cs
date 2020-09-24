@@ -1,5 +1,4 @@
-﻿
-using EventCoApp.DataAccessLibrary.Models;
+﻿using EventCoApp.DataAccessLibrary.Models;
 using EventCoApp.WebApp.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +10,13 @@ namespace EventCoApp.Models.Extensions
     {
         public static PermissionViewModel ToViewModel(this Permission source)
         {
-            var destination = new PermissionViewModel();
-
-            destination.Id = source.Id;
-            destination.Name = source.Name;
-            destination.Group = source.Group;
-            destination.Description = source.Description;
+            var destination = new PermissionViewModel
+            {
+                Id = source.Id,
+                Name = source.Name,
+                Group = source.Group,
+                Description = source.Description
+            };
 
             return destination;
         }

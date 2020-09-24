@@ -1,4 +1,4 @@
-﻿@model EventViewModel
+﻿@model NewsViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -17,14 +17,14 @@
 <div class="container">
     <div class="row">
         <div class="col text-center">
-            <h1>Create Event</h1>
+            <h1>Create News</h1>
             <hr />
         </div>
     </div>
     <form enctype="multipart/form-data" method="post">
         <div class="row">
             <div class="col-md-6">
-                @Html.AntiForgeryToken()    
+                @Html.AntiForgeryToken()
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     @Html.LabelFor(m => m.Name)
@@ -41,43 +41,6 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    @Html.LabelFor(m => m.LocationId)
-                    @Html.DropDownListFor(m => m.LocationId, Model.Locations, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    @Html.LabelFor(m => m.EventTypeId)
-                    @Html.DropDownListFor(m => m.EventTypeId, Model.EventTypes, new { @class = "form-control" })
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    @Html.LabelFor(m => m.When)
-                    @Html.EditorFor(m => m.When, additionalViewData: new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(m => m.When, null, new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    @Html.LabelFor(m => m.TicketPrice)
-                    @Html.EditorFor(m => m.TicketPrice, additionalViewData: new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(m => m.TicketPrice, null, new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    @Html.LabelFor(m => m.TicketCount)
-                    @Html.EditorFor(m => m.TicketCount, additionalViewData: new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(m => m.TicketCount, null, new { @class = "text-danger" })
-                </div>
-            </div>
             <div class="col-md-6">
                 <div class="form-group">
                     @Html.LabelFor(m => m.Images)

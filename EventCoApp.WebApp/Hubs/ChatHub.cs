@@ -29,7 +29,7 @@ namespace EventCoApp.WebApp.Hubs
             messageDeserilized.CreatedById = userId;
             await _context.Messages.AddAsync(messageDeserilized.ToEntity());
             await _context.SaveChangesAsync();
-            await Clients.All.SendAsync("ReceiveMessage", user, messageDeserilized.Content);
+            await Clients.All.SendAsync("ReceiveMessage", user, messageDeserilized);
         }
     }
 }

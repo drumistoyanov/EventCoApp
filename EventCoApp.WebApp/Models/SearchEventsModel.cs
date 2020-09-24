@@ -21,7 +21,7 @@ namespace EventCoApp.WebApp.Models
         [Display(Name = "Types")]
         public IEnumerable<SelectListItem> EventTypes { get; set; }
 
-        public IEnumerable<NewsViewModel> News { get; set; }
+        public IEnumerable<NewsListItemViewModel> News { get; set; }
         public int SiteVisitors { get; set; }
     }
 }

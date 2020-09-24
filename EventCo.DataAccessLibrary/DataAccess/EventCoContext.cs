@@ -21,7 +21,8 @@ namespace EventCoApp.DataAccessLibrary.DataAccess
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<EventType> EventTypes { get; set; }
         public virtual DbSet<Location> Locations { get; set; }
-        public virtual DbSet<Image> Images { get; set; }
+        public virtual DbSet<EventImage> EventImage { get; set; }
+        public virtual DbSet<NewsImage> NewsImages { get; set; }
         public virtual DbSet<Log> Logs { get; set; }
         public virtual DbSet<News> News { get; set; }
         public virtual DbSet<Ticket> Tickets { get; set; }
@@ -108,7 +109,7 @@ namespace EventCoApp.DataAccessLibrary.DataAccess
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
                 entity.Property(e => e.When).HasColumnType("datetime");
                 entity.HasOne<Location>(d => d.Location).WithMany(p => p.Events).HasForeignKey(d => d.LocationId);
-                entity.HasMany<Image>(d => d.Images).WithOne(p => p.Event).HasForeignKey(p => p.EventId);
+                entity.HasMany<EventImage>(d => d.Images).WithOne(p => p.Event).HasForeignKey(p => p.EventId);
                 entity.HasMany<Ticket>(d => d.Tickets).WithOne(p => p.Event).HasForeignKey(p => p.EventId);
                 entity.HasMany<Message>(e => e.Messages).WithOne(p => p.Event).HasForeignKey(p => p.EventId);
                 entity.ToTable("Events");
@@ -184,6 +185,7 @@ namespace EventCoApp.DataAccessLibrary.DataAccess
             builder.Entity<News>(entity =>
             {
                 entity.HasOne(d => d.CreatedBy).WithMany(p => p.News).HasForeignKey(d => d.CreatedById);
+                entity.HasMany(n => n.Images).WithOne(n => n.News).HasForeignKey(n => n.NewsId);
                 entity.ToTable("News");
             });
         }
