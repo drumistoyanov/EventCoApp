@@ -1,6 +1,7 @@
 ﻿
 using EventCoApp.Common.Enums;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -34,12 +35,19 @@ namespace EventCoApp.DataAccessLibrary.Models
         public bool IsSubscribed { get; set; } = false;
         public string ProfilePicture { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<IdentityUserRole<int>> Roles { get; set; }
+        [JsonIgnore]
         public virtual ICollection<IdentityUserLogin<int>> Logins { get; set; }
+        [JsonIgnore]
         public virtual ICollection<UserPermission> UserPermissions { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Booking> Bookings { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Event> CreatedEvents { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Message> Messages { get; set; }
+        [JsonIgnore]
         public virtual ICollection<News> News { get; set; }
     }
 }

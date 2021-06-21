@@ -53,7 +53,7 @@ namespace EventCoApp.DataAccessLibrary.DataAccess
 
             builder.Entity<Role>(entity =>
             {
-                entity.HasIndex(e => e.NormalizedName).HasName("RoleNameIndex");
+                entity.HasIndex(e => e.NormalizedName).HasDatabaseName("RoleNameIndex");
 
                 entity.Property(e => e.Name).HasMaxLength(256);
 
@@ -65,9 +65,9 @@ namespace EventCoApp.DataAccessLibrary.DataAccess
             });
             builder.Entity<User>(entity =>
             {
-                entity.HasIndex(e => e.NormalizedEmail).HasName("EmailIndex");
+                entity.HasIndex(e => e.NormalizedEmail).HasDatabaseName("EmailIndex");
 
-                entity.HasIndex(e => e.NormalizedUserName).HasName("UserNameIndex");
+                entity.HasIndex(e => e.NormalizedUserName).HasDatabaseName("UserNameIndex");
 
                 entity.Property(e => e.Email).HasMaxLength(256);
 
@@ -124,7 +124,7 @@ namespace EventCoApp.DataAccessLibrary.DataAccess
             });
             builder.Entity<Location>(entity =>
             {
-                entity.HasIndex(e => e.Name).HasName("BG_Location").IsUnique();
+                entity.HasIndex(e => e.Name).HasDatabaseName("BG_Location").IsUnique();
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(100)
@@ -148,7 +148,7 @@ namespace EventCoApp.DataAccessLibrary.DataAccess
             });
             builder.Entity<Permission>(entity =>
             {
-                entity.HasIndex(e => e.Name).HasName("BG_Permission").IsUnique();
+                entity.HasIndex(e => e.Name).HasDatabaseName("BG_Permission").IsUnique();
 
                 entity.Property(e => e.Description)
                     .IsRequired()

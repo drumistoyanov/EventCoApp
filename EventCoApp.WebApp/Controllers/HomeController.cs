@@ -58,7 +58,7 @@ namespace EventCoApp.WebApp.Controllers
                 .Include(n => n.CreatedBy)
                 .Include(n=>n.Images)
                 .Where(n => n.Approved == true);
-            if (news.Count()>0)
+            if (news.Any())
             {
                 var log = await _context.Logs.FirstOrDefaultAsync(l => l.Type == LogType.SiteCounter);
                 return View(new SearchEventsModel { Locations = GetLocationsList(), EventTypes = GetEventTypesList(), From = DateTime.Now, To = DateTime.Now, SiteVisitors = log.SiteCounter, News = news.ToList().ToListViewModel() });

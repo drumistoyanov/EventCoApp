@@ -12,9 +12,10 @@ namespace EventCoApp.Models.Extensions
     {
         public static Location ToEntity(this LocationViewModel source)
         {
-            var destination = new Location();
-
-            destination.Name = source.Name;
+            var destination = new Location
+            {
+                Name = source.Name
+            };
 
             return destination;
         }
@@ -38,30 +39,33 @@ namespace EventCoApp.Models.Extensions
 
         public static LocationViewModel ToViewModel(this Location source)
         {
-            var destination = new LocationViewModel();
-
-            destination.Id = source.Id;
-            destination.Name = source.Name;
+            var destination = new LocationViewModel
+            {
+                Id = source.Id,
+                Name = source.Name
+            };
 
             return destination;
         }
 
         public static LocationDetailsViewModel ToDetailsViewModel(this Location source)
         {
-            var destination = new LocationDetailsViewModel();
-
-            destination.Id = source.Id;
-            destination.Name = source.Name;
+            var destination = new LocationDetailsViewModel
+            {
+                Id = source.Id,
+                Name = source.Name
+            };
 
             return destination;
         }
 
         public static LocationListItemViewModel ToListItemViewModel(this Location source)
         {
-            var destination = new LocationListItemViewModel();
-
-            destination.Id = source.Id;
-            destination.Name = source.Name;
+            var destination = new LocationListItemViewModel
+            {
+                Id = source.Id,
+                Name = source.Name
+            };
 
             return destination;
         }

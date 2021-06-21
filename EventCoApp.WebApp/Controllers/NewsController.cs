@@ -108,6 +108,7 @@ namespace EventCoApp.WebApp.Controllers
                         }
                     }
                     var news = model.ToEntity();
+                    news.Approved = true;
 
                     _context.News.Add(news);
 

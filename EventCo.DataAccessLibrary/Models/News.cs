@@ -1,4 +1,5 @@
 ﻿using EventCoApp.DataAccessLibrary.Common;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,6 +16,7 @@ namespace EventCoApp.DataAccessLibrary.Models
         [Required]
         [Column(TypeName = "nvarchar(1000)")]
         public string Description { get; set; }
+        [JsonIgnore]
         public virtual ICollection<NewsImage> Images { get; set; }
         public bool Approved { get; set; } = false;
         public int Counter { get; set; } = 0;

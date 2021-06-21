@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,7 @@ namespace EventCoApp.WebApp.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
         protected readonly IHttpContextAccessor _accessor;
+        protected readonly IDistributedCache _cache;
         protected readonly UserManager<User> _userManager;
         protected EventCoContext _context;
         protected readonly IWebHostEnvironment _hostingEnvironment;

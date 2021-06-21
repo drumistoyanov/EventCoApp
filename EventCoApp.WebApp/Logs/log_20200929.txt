@@ -1,0 +1,5 @@
+2020-09-29T16:23:17.8711182+03:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2020-09-29T16:23:17.8819374+03:00  [INF] Hosting environment: "Development" (c3307c92)
+2020-09-29T16:23:17.8824238+03:00  [INF] Content root path: "C:\Diploma\EventCoApp\EventCoApp\EventCoApp.WebApp" (b5d60022)
+2020-09-29T16:23:20.4457450+03:00 80000004-0004-ff00-b63f-84710c7967bb [INF] Log message in the Index() method (d2c930e3)
+2020-09-29T16:23:30.0425803+03:00 80000005-0001-fc00-b63f-84710c7967bb [INF] Log message in the Index() method (d2c930e3)

@@ -1,6 +1,7 @@
 ﻿using EventCoApp.Common.Enums;
 using EventCoApp.DataAccessLibrary.DataAccess;
 using EventCoApp.DataAccessLibrary.Models;
+using EventCoApp.WebApp.Extensions;
 using EventCoApp.WebApp.Models;
 using EventCoApp.WebApp.Models.Extensions;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -26,35 +28,62 @@ namespace EventCoApp.WebApp.Controllers
     public class EventsController : BaseController
     {
         private readonly ILogger<EventsController> _logger;
+        private readonly IDistributedCache _cache;
         public EventsController(
-           UserManager<User> userManager, EventCoContext context, IWebHostEnvironment hostEnvironment, ILogger<EventsController> logger) : base(userManager, context, hostEnvironment)
+           UserManager<User> userManager, EventCoContext context, IWebHostEnvironment hostEnvironment, ILogger<EventsController> logger, IDistributedCache cache) : base(userManager, context, hostEnvironment)
         {
             _logger = logger;
+            _cache = cache;
         }
-        public IActionResult Index(int? page)
+        public async Task<IActionResult> Index(int? page)
         {
+
+            List<Event> events = null;
+            string isCachedData = "";
+
+            string recordKey = "Events_" + DateTime.Now.ToString("yyyyMMdd_hh");
+
+            events = await _cache.GetRecordAsync<List<Event>>(recordKey);
+
+            if (events is null)
+            {
+                events = _context.Events
+               .Include(e => e.CreatedBy)
+               .Include(e => e.Images)
+               .Include(e => e.EventType)
+               .Include(e => e.Location)
+               .OrderByDescending(e => e.Counter)
+               .ThenByDescending(e => e.When)
+               .ToList();
+                isCachedData = "";
+                await _cache.SetRecordAsync(recordKey, events,TimeSpan.FromMinutes(100));
+            }
+            else
+            {
+                isCachedData = "text-danger";
+            }
+
             _logger.LogInformation("Opened Index() page");
             var pageNumber = page ?? 1;
 
-            var pageSize = 6;
+            var pageSize = 50;
 
-            var events = _context.Events
-                .Include(e => e.CreatedBy)
-                .Include(e => e.Images)
-                .Include(e => e.EventType)
-                .Include(e => e.Location)
-                .Include(e => e.Tickets)
-                .OrderByDescending(e => e.Counter)
-                .ThenByDescending(e => e.When);
+            //events = _context.Events
+            //   .Include(e => e.CreatedBy)
+            //   .Include(e => e.Images)
+            //   .Include(e => e.EventType)
+            //   .Include(e => e.Location)
+            //   .OrderByDescending(e => e.Counter)
+            //   .ThenByDescending(e => e.When);
 
-            foreach (var item in events)
-            {
-                if (item.When <= DateTime.Now)
-                {
-                    item.TicketCount = 0;
-                    item.Description = "Event ended";
-                }
-            }
+            //foreach (var item in events)
+            //{
+            //    if (item.When <= DateTime.Now)
+            //    {
+            //        item.TicketCount = 0;
+            //        item.Description = "Event ended";
+            //    }
+            //}
 
             var eventsPage = events
                 .Skip((pageNumber - 1) * pageSize)
@@ -72,7 +101,7 @@ namespace EventCoApp.WebApp.Controllers
             int? page = 1;
             var pageNumber = page ?? 1;
             IQueryable<Event> events = null;
-            var pageSize = 6;
+            var pageSize = 50;
             if (model.LocationId == 9999)
             {
                 events = _context.Events
@@ -80,7 +109,6 @@ namespace EventCoApp.WebApp.Controllers
               .Include(e => e.Images)
               .Include(e => e.EventType)
               .Include(e => e.Location)
-              .Include(e => e.Tickets)
               .Where(e => e.When >= model.From && e.When <= model.To && e.EventTypeId == model.EventTypeId)
               .OrderByDescending(e => e.Counter)
               .ThenByDescending(e => e.When);
@@ -92,33 +120,15 @@ namespace EventCoApp.WebApp.Controllers
                    .Include(e => e.Images)
                    .Include(e => e.EventType)
                    .Include(e => e.Location)
-                   .Include(e => e.Tickets)
                    .Where(e => e.LocationId == model.LocationId && e.When >= model.From && e.When <= model.To && e.EventTypeId == model.EventTypeId)
                    .OrderByDescending(e => e.Counter)
                    .ThenByDescending(e => e.When);
             }
-            foreach (var item in events)
+            if (!events.Any())
             {
-                if (item.When <= DateTime.Now)
-                {
-                    item.TicketCount = 0;
-                    item.Description = "Event ended";
-                }
-            }
-            var eventsPage = events
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize).ToList();
-
-            ViewData["PageNumber"] = pageNumber;
-            ViewData["PageSize"] = pageSize;
-            ViewData["TotalItemCount"] = events.Count();
-
-            if (eventsPage.Count != 0)
-            {
-                return View(eventsPage.ToListViewModel());
-            }
-            else
-            {
+                ViewData["PageNumber"] = pageNumber;
+                ViewData["PageSize"] = pageSize;
+                ViewData["TotalItemCount"] = events.Count();
                 var eventt = new EventListItemViewModel() { ErrorMessage = $"No events from {model.From} to {model.To} for your criretia" };
                 var list = new List<EventListItemViewModel>
                 {
@@ -126,6 +136,28 @@ namespace EventCoApp.WebApp.Controllers
                 };
                 return View(list);
             }
+            else
+            {
+                foreach (var item in events)
+                {
+                    if (item.When <= DateTime.Now)
+                    {
+                        item.TicketCount = 0;
+                        item.Description = "Event ended";
+                    }
+                }
+                var eventsPage = events
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize).ToList();
+
+                ViewData["PageNumber"] = pageNumber;
+                ViewData["PageSize"] = pageSize;
+                ViewData["TotalItemCount"] = events.Count();
+                return View(eventsPage.ToListViewModel());
+            }
+
+
+
 
         }
 
@@ -301,7 +333,7 @@ namespace EventCoApp.WebApp.Controllers
             if (eventt == null)
             {
                 _logger.LogError("Error changing chat visability");
-                return Error("Error changing chat visability","Events" );
+                return Error("Error changing chat visability", "Events");
             }
             if (eventt.VisibleChat == false)
             {

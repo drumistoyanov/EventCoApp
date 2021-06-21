@@ -1,0 +1,8 @@
+2020-11-13T18:35:33.2595573+02:00  [INF] Now listening on: "https://localhost:5001" (d826f4b8)
+2020-11-13T18:35:33.2629986+02:00  [INF] Now listening on: "http://localhost:5000" (d826f4b8)
+2020-11-13T18:35:33.2655049+02:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2020-11-13T18:35:33.2655418+02:00  [INF] Hosting environment: "Production" (c3307c92)
+2020-11-13T18:35:33.2655639+02:00  [INF] Content root path: "C:\Diploma\EventCoApp\EventCoApp\EventCoApp.WebApp" (b5d60022)
+2020-11-13T18:35:51.7961285+02:00 0HM47U8MBU1BS:00000001 [INF] Log message in the Index() method (d2c930e3)
+2020-11-13T18:36:05.5727931+02:00 0HM47U8MBU1BT:00000001 [INF] Log message in the Index() method (d2c930e3)
+2020-11-13T18:36:07.3223479+02:00  [INF] Application is shutting down... (90f52c38)

@@ -1,5 +1,6 @@
 ﻿using EventCoApp.Common.Enums;
 using EventCoApp.DataAccessLibrary.Common;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -41,9 +42,13 @@ namespace EventCoApp.DataAccessLibrary.Models
 #nullable disable
         public int Counter { get; set; } = 0;
         public bool VisibleChat { get; set; } = true;
+        [JsonIgnore]
         public virtual ICollection<EventImage> Images { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Ticket> Tickets { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Booking> Bookings { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Message> Messages { get; set; }
     }
 }
